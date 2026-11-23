@@ -1,6 +1,6 @@
 {
   "name": "iobroker.abfallmanager",
-  "version": "0.21.5",
+  "version": "0.21.6",
   "description": "Local waste collection dates from ICS and manual entries",
   "main": "main.js",
   "author": "Andre Rudat",

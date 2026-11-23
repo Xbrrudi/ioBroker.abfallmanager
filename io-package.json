@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "abfallmanager",
-    "version": "0.21.5",
+    "version": "0.21.6",
     "titleLang": {
       "de": "Abfallmanager",
       "en": "Waste Manager",
@@ -81,20 +81,33 @@
       "calendar"
     ],
     "news": {
-  "0.21.5": {
-    "en": "Improved adapter metadata and publication checks",
-    "de": "Adapter-Metadaten und Veröffentlichungsprüfungen verbessert",
-    "ru": "Улучшены метаданные адаптера и проверки публикации",
-    "pt": "Melhorados os metadados do adaptador e as verificações de publicação",
-    "nl": "Adaptermetadata en publicatiecontroles verbeterd",
-    "fr": "Métadonnées de l'adaptateur et vérifications de publication améliorées",
-    "it": "Migliorati i metadati dell'adattatore e i controlli di pubblicazione",
-    "es": "Mejorados los metadatos del adaptador y las comprobaciones de publicación",
-    "pl": "Ulepszono metadane adaptera i kontrole publikacji",
-    "uk": "Покращено метадані адаптера та перевірки публікації",
-    "zh-cn": "改进了适配器元数据和发布检查"
-  }
-},
+      "0.21.6": {
+        "en": "Improved adapter metadata and publication checks",
+        "de": "Adapter-Metadaten und Veröffentlichungsprüfungen verbessert",
+        "ru": "Улучшены метаданные адаптера и проверки публикации",
+        "pt": "Melhorados os metadados do adaptador e as verificações de publicação",
+        "nl": "Adaptermetadata en publicatiecontroles verbeterd",
+        "fr": "Métadonnées de l'adaptateur et vérifications de publication améliorées",
+        "it": "Migliorati i metadati dell'adattatore e i controlli di pubblicazione",
+        "es": "Mejorados los metadatos del adaptador y las comprobaciones de publicación",
+        "pl": "Ulepszono metadane adaptera i kontrole publikacji",
+        "uk": "Покращено метадані адаптера та перевірки публікації",
+        "zh-cn": "改进了适配器元数据和发布检查"
+      },
+      "0.21.5": {
+        "en": "Improved adapter metadata and publication checks",
+        "de": "Adapter-Metadaten und Veröffentlichungsprüfungen verbessert",
+        "ru": "Улучшены метаданные адаптера и проверки публикации",
+        "pt": "Melhorados os metadados do adaptador e as verificações de publicação",
+        "nl": "Adaptermetadata en publicatiecontroles verbeterd",
+        "fr": "Métadonnées de l'adaptateur et vérifications de publication améliorées",
+        "it": "Migliorati i metadati dell'adattatore e i controlli di pubblicazione",
+        "es": "Mejorados los metadatos del adaptador y las comprobaciones de publicación",
+        "pl": "Ulepszono metadane adaptera i kontrole publikacji",
+        "uk": "Покращено метадані адаптера та перевірки публікації",
+        "zh-cn": "改进了适配器元数据和发布检查"
+      }
+    },
     "licenseInformation": {
       "license": "MIT",
       "type": "free"
@@ -141,5 +154,5 @@
   },
   "objects": [],
   "instanceObjects": [],
-  "version": "0.21.5"
+  "version": "0.21.6"
 }
