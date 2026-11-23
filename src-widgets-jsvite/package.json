@@ -1,0 +1,17 @@
+{
+  "name": "abfallmanager-vis2-widgets",
+  "private": true,
+  "version": "0.21.4",
+  "type": "module",
+  "scripts": {
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@iobroker/types-vis-2": "~2.20.1",
+    "@module-federation/vite": "^1.23.5",
+    "@vitejs/plugin-react": "^6.1.2",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "vite": "^8.3.4"
+  }
+}

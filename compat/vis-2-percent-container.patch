@@ -1,0 +1,59 @@
+diff --git a/packages/iobroker.vis-2/src-vis/src/Vis/visView.tsx b/packages/iobroker.vis-2/src-vis/src/Vis/visView.tsx
+index 0bff1bf..fe3e724 100644
+--- a/packages/iobroker.vis-2/src-vis/src/Vis/visView.tsx
++++ b/packages/iobroker.vis-2/src-vis/src/Vis/visView.tsx
+@@ -2143,15 +2143,30 @@ class VisView extends React.Component<VisViewProps, VisViewState> {
+         };
+     }
+ 
++    /** The same CSS containing block that resolves an absolute widget's percentage dimensions. */
++    private getPercentageContainer(): HTMLElement | null {
++        const view = this.refLimitScreen.current || this.refView.current;
++        if (!view) {
++            return null;
++        }
++        const css = window.getComputedStyle(view);
++        const ownContainingBlock =
++            css.position !== 'static' || css.transform !== 'none' || css.perspective !== 'none' ||
++            css.filter !== 'none' || /(?:layout|paint|strict|content)/.test(css.contain) ||
++            /(?:transform|perspective|filter)/.test(css.willChange);
++        return ownContainingBlock ? view : (view.offsetParent as HTMLElement | null) || view;
++    }
++
+     pxToPercent = (oldStyle: WidgetStyle, newStyle: WidgetStyle): null | WidgetStyle => {
+-        if (!this.refView.current) {
++        const container = this.getPercentageContainer();
++        if (!container) {
+             return null;
+         }
+         const pRect = {
+-            left: this.refView.current.clientLeft,
+-            top: this.refView.current.clientTop,
+-            height: this.refView.current.clientHeight,
+-            width: this.refView.current.clientWidth,
++            left: container.clientLeft,
++            top: container.clientTop,
++            height: container.clientHeight,
++            width: container.clientWidth,
+         };
+ 
+         if (oldStyle.position === 'relative') {
+@@ -2206,14 +2221,15 @@ class VisView extends React.Component<VisViewProps, VisViewState> {
+         attr: string,
+         cb: (results: (string | null)[]) => void,
+     ): (string | null)[] => {
+-        if (!this.refView.current) {
++        const container = this.getPercentageContainer();
++        if (!container) {
+             return [];
+         }
+         const pRect = {
+             // left: this.refView.current.clientLeft,
+             // top: this.refView.current.clientTop,
+-            height: this.refView.current.clientHeight,
+-            width: this.refView.current.clientWidth,
++            height: container.clientHeight,
++            width: container.clientWidth,
+         };
+ 
+         const results: (string | null)[] = wids.map(wid => {

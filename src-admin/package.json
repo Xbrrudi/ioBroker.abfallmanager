@@ -1,0 +1,34 @@
+{
+  "name": "abfallmanager-admin",
+  "private": true,
+  "version": "0.20.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite --port 4173",
+    "lint": "eslint -c eslint.config.mjs",
+    "build": "vite build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@iobroker/gui-components": "10.3.14",
+    "@iobroker/json-config": "10.1.8",
+    "@module-federation/vite": "^1.19.1",
+    "@vitejs/plugin-react": "^6.0.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "vite": "^8.1.5",
+    "esbuild": "^0.28.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

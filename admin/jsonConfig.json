@@ -1,0 +1,117 @@
+{
+  "i18n": false,
+  "type": "tabs",
+  "items": {
+    "general": {
+      "type": "panel",
+      "label": "Allgemein / ICS",
+      "items": {
+        "importHelp": {
+          "type": "staticText",
+          "text": "ICS-Datei auswählen, Import prüfen und Konflikte bestätigen. Weitere Dateien ergänzen die vorhandenen Termine."
+        },
+        "cleanupInfo": {
+          "type": "staticText",
+          "text": "Abgelaufene Termine werden aus dem gespeicherten ICS-Kalender und den manuellen Terminen entfernt. Standard: am Tag nach der Abholung. Manuelle Sofortbereinigung über den Datenpunkt cleanup.trigger."
+        },
+        "autoCleanup": {
+          "type": "checkbox",
+          "label": "Abgelaufene Termine automatisch löschen",
+          "newLine": true
+        },
+        "retentionDays": {
+          "type": "number",
+          "label": "Tage nach Abholung aufbewahren (0 = am Abholtag, 1 = am Folgetag)",
+          "min": 0,
+          "max": 365,
+          "newLine": true
+        },
+        "importPanel": {
+          "type": "custom",
+          "name": "AbfallmanagerSet/Components/ImportPanel",
+          "url": "custom/customComponents.js",
+          "guiApi": 2,
+          "newLine": true,
+          "xs": 12
+        }
+      }
+    },
+    "binsTab": {
+      "type": "panel",
+      "label": "Tonnenarten",
+      "items": {
+        "bins": {
+          "type": "table",
+          "label": "Verwendete Abfallarten",
+          "items": [
+            {
+              "attr": "enabled",
+              "type": "checkbox",
+              "title": "Aktiv"
+            },
+            {
+              "attr": "id",
+              "type": "text",
+              "title": "Kennung"
+            },
+            {
+              "attr": "name",
+              "type": "text",
+              "title": "Bezeichnung"
+            },
+            {
+              "attr": "keywords",
+              "type": "text",
+              "title": "Suchbegriffe (Komma)"
+            },
+            {
+              "attr": "color",
+              "type": "color",
+              "title": "Farbe"
+            }
+          ]
+        }
+      }
+    },
+    "dates": {
+      "type": "panel",
+      "label": "Termine / Korrekturen",
+      "items": {
+        "datesInfo": {
+          "type": "staticText",
+          "text": "Importierte und manuelle Termine gemeinsam bearbeiten. Änderungen werden erst mit Speichern übernommen."
+        },
+        "calendar": {
+          "type": "custom",
+          "name": "AbfallmanagerSet/Components/CalendarPanel",
+          "url": "custom/customComponents.js",
+          "guiApi": 2,
+          "newLine": true,
+          "xs": 12
+        }
+      }
+    },
+    "display": {
+      "type": "panel",
+      "label": "Anzeige in VIS 2",
+      "items": {
+        "daysBefore": {
+          "type": "number",
+          "label": "Tage vor der Abholung anzeigen",
+          "min": 0,
+          "max": 30
+        },
+        "hideHour": {
+          "type": "number",
+          "label": "Am Abholtag ausblenden (Stunde 0–24)",
+          "min": 0,
+          "max": 24
+        },
+        "displayHint": {
+          "type": "staticText",
+          "text": "Position, Größe und Schatten werden am VIS-2-Widget eingestellt. Das native Widget bleibt bis zum erfolgreichen Laufzeittest deaktiviert."
+        }
+      }
+    }
+  }
+}

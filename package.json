@@ -1,0 +1,76 @@
+{
+  "name": "iobroker.abfallmanager",
+  "version": "0.21.4",
+  "description": "Local waste collection dates from ICS and manual entries",
+  "main": "main.js",
+  "author": "Andre Rudat",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xbrrudi/ioBroker.abfallmanager.git"
+  },
+  "keywords": [
+    "ioBroker",
+    "waste",
+    "trash",
+    "ics",
+    "vis-2"
+  ],
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^3.2.3"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check main.js && node --check lib/schedule.js && node test/validate.cjs",
+    "build:widgets": "node build-widgets.cjs",
+    "preflight": "node preflight.cjs",
+    "preflight:widgets": "node preflight.cjs --require-widgets",
+    "build:admin": "node build-admin.cjs",
+    "test:browser": "node test/browser.cjs",
+    "test:controller": "node test/controller.cjs",
+    "test:widget-browser": "node test/widget-browser.cjs"
+  },
+  "files": [
+    "main.js",
+    "lib/",
+    "admin/",
+    "assets/",
+    "io-package.json",
+    "README.md",
+    "LICENSE",
+    "vis/",
+    "www/",
+    "src-widgets-jsvite/src/",
+    "src-widgets-jsvite/package.json",
+    "src-widgets-jsvite/package-lock.json",
+    "src-widgets-jsvite/vite.config.js",
+    "src-widgets-jsvite/index.html",
+    "src-widgets-jsvite/README.md",
+    "widgets/",
+    "build-widgets.cjs",
+    "preflight.cjs",
+    "TESTANLEITUNG.md",
+    "MIGRATION.md",
+    "src-admin/src/",
+    "src-admin/package.json",
+    "src-admin/package-lock.json",
+    "src-admin/vite.config.ts",
+    "build-admin.cjs",
+    "test/",
+    "src-admin/index.html",
+    "TESTBERICHT.md",
+    "compat/"
+  ],
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "esbuild": "^0.28.2",
+    "playwright": "1.58.2"
+  },
+  "homepage": "https://github.com/Xbrrudi/ioBroker.abfallmanager#readme",
+  "bugs": {
+    "url": "https://github.com/Xbrrudi/ioBroker.abfallmanager/issues"
+  }
+}

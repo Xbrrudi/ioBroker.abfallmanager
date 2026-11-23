@@ -1,0 +1,30 @@
+[
+  {
+    "id": "rest",
+    "name": "Restabfalltonne",
+    "keywords": "Restabfall,Restmüll",
+    "enabled": true,
+    "color": "#4a4a4a"
+  },
+  {
+    "id": "gelb",
+    "name": "Wertstofftonne",
+    "keywords": "Wertstoff,Gelbe Tonne,Gelber Sack",
+    "enabled": true,
+    "color": "#e8d122"
+  },
+  {
+    "id": "bio",
+    "name": "Biotonne",
+    "keywords": "Bioabfall,Biotonne",
+    "enabled": false,
+    "color": "#81552e"
+  },
+  {
+    "id": "papier",
+    "name": "Papiertonne",
+    "keywords": "Papier,Pappe",
+    "enabled": false,
+    "color": "#2269ae"
+  }
+]
