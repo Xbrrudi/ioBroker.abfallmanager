@@ -1,0 +1,100 @@
+{
+  "common": {
+    "name": "abfallmanager",
+    "version": "0.21.4",
+    "titleLang": {
+      "de": "Abfallmanager",
+      "en": "Waste Manager"
+    },
+    "desc": {
+      "de": "Lokale Abfuhrtermine aus ICS und manuellen Einträgen",
+      "en": "Local waste pickup schedule from ICS and manual entries"
+    },
+    "authors": [
+      "Andre Rudat"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "type": "date-and-time",
+    "connectionType": "local",
+    "dataSource": "push",
+    "compact": true,
+    "enabled": true,
+    "messagebox": true,
+    "adminUI": {
+      "config": "json"
+    },
+    "icon": "abfallmanager.svg",
+    "extIcon": "",
+    "readme": "",
+    "tier": 3,
+    "supportCustoms": false,
+    "dependencies": [
+      {
+        "js-controller": ">=7.0.0"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=8.0.0"
+      }
+    ],
+    "visWidgets": {
+      "vis2AbfallmanagerWidgets": {
+        "name": "vis2AbfallmanagerWidgets",
+        "i18n": "component",
+        "url": "abfallmanager/customWidgets.js",
+        "bundlerType": "module",
+        "components": [
+          "WasteBinWidget"
+        ]
+      }
+    },
+    "restartAdapters": [
+      "vis-2"
+    ]
+  },
+  "native": {
+    "icsText": "",
+    "manualEntries": [],
+    "bins": [
+      {
+        "id": "rest",
+        "name": "Restabfalltonne",
+        "keywords": "Restabfall,Restmüll",
+        "enabled": true,
+        "color": "#4a4a4a"
+      },
+      {
+        "id": "gelb",
+        "name": "Wertstofftonne",
+        "keywords": "Wertstoff,Gelbe Tonne,Gelber Sack",
+        "enabled": true,
+        "color": "#e8d122"
+      },
+      {
+        "id": "bio",
+        "name": "Biotonne",
+        "keywords": "Bioabfall,Biotonne",
+        "enabled": false,
+        "color": "#81552e"
+      },
+      {
+        "id": "papier",
+        "name": "Papiertonne",
+        "keywords": "Papier,Pappe",
+        "enabled": false,
+        "color": "#2269ae"
+      }
+    ],
+    "daysBefore": 2,
+    "hideHour": 18,
+    "autoCleanup": true,
+    "retentionDays": 1,
+    "importedEntries": []
+  },
+  "objects": [],
+  "instanceObjects": [],
+  "version": "0.21.4"
+}
