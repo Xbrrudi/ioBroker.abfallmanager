@@ -21,16 +21,36 @@ test('Größe, Abstand, Schatten und Text werden berücksichtigt',async()=>{cons
 test('Duplikate, ungültige Tonnen und ungültige Datumswerte werden nicht angezeigt',async()=>{const {item}=widget({getState:async()=>({val:JSON.stringify([...future,future[0],{type:'evil',date:'2027-01-01'},{type:'rest',date:'2027-02-30'}])})});await tick();assert.equal(item.state.collections.length,4);item.componentWillUnmount();});
 test('Bestehendes Zeitfenster: zwei Tage vorher und Ausblenden ab 18 Uhr',()=>{const {calculate}=require('../lib/schedule');const bins=require('../lib/default-bins.json').map(b=>({...b,enabled:true}));const rows=future.map(e=>({...e,title:e.type}));assert.equal(calculate(rows,bins,2,18,new Date(2026,11,29)).visible.length,0);assert.equal(calculate(rows,bins,2,18,new Date(2026,11,30)).visible.length,4);assert.equal(calculate(rows,bins,2,18,new Date(2027,0,1,17,59)).visible.length,4);assert.equal(calculate(rows,bins,2,18,new Date(2027,0,1,18,0)).visible.length,0);});
 
-test('Fester Anker und Pixelmaße bleiben bei wechselnden Tonnen identisch',async()=>{
- const {item,calls}=widget();await tick();
- for(const type of ['gelb','rest','bio','papier']){
-  calls.subscribe[0].cb('',{val:JSON.stringify([{type,date:'2027-01-01'}])});
-  const body=item.renderWidgetBody({});const svg=body.props.children[0];const image=svg.props.children[0].props.children[0];
-  assert.equal(svg.props.style.left,0);assert.equal(svg.props.style.bottom,0);assert.equal(image.props.x,0);assert.equal(image.props.width,120);assert.equal(image.props.height,185);
-  assert.equal(svg.props.width,132);assert.equal(svg.props.height,197);
- }
- calls.subscribe[0].cb('',{val:JSON.stringify([{type:'papier',date:'2027-01-01'},{type:'gelb',date:'2027-01-01'}])});
- const svg=item.renderWidgetBody({}).props.children[0];const groups=svg.props.children;assert.equal(groups[0].props['data-type'],'gelb');assert.equal(groups[1].props['data-type'],'papier');assert.equal(groups[0].props.children[0].props.x,0);assert.equal(groups[1].props.children[0].props.x,132);item.componentWillUnmount();
+test('Fester Anker und skalierbare SVG-Geometrie bleiben bei wechselnden Tonnen stabil',async()=>{
+  const {item,calls}=widget();await tick();
+  let reference;
+  for(const type of ['gelb','rest','bio','papier']){
+    calls.subscribe[0].cb('',{val:JSON.stringify([{type,date:'2027-01-01'}])});
+    const svg=item.renderWidgetBody({}).props.children[0];
+    const image=svg.props.children[0].props.children[0];
+    assert.equal(svg.props.style.inset,0);
+    assert.equal(svg.props.width,'100%');
+    assert.equal(svg.props.height,'100%');
+    assert.equal(svg.props.preserveAspectRatio,'xMinYMax meet');
+    assert.equal(image.props.x,0);
+    const geometry=[svg.props.viewBox,image.props.width,image.props.height];
+    if(reference)assert.deepEqual(geometry,reference);
+    else reference=geometry;
+  }
+  calls.subscribe[0].cb('',{val:JSON.stringify([{type:'papier',date:'2027-01-01'},{type:'gelb',date:'2027-01-01'}])});
+  const svg=item.renderWidgetBody({}).props.children[0];
+  const groups=svg.props.children;
+  assert.equal(svg.props.style.inset,0);
+  assert.equal(svg.props.preserveAspectRatio,'xMinYMax meet');
+  assert.equal(groups[0].props['data-type'],'gelb');
+  assert.equal(groups[1].props['data-type'],'papier');
+  const first=groups[0].props.children[0].props;
+  const second=groups[1].props.children[0].props;
+  assert.equal(first.x,0);
+  assert.equal(first.y,'0');
+  assert.equal(second.y,'0');
+  assert.ok(second.x>=first.width);
+  item.componentWillUnmount();
 });
 test('Nur neue Widgets erhalten Prozent-Defaults; vorhandene Styles werden beim Rendern nicht umgeschrieben',()=>{
  const {item,Class}=widget();const defaults=Class.getWidgetInfo().visDefaultStyle;for(const name of ['left','top','width','height'])assert.match(defaults[name],/%$/);
