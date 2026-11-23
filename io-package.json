@@ -1,19 +1,36 @@
 {
   "common": {
     "name": "abfallmanager",
-    "version": "0.21.4",
+    "version": "0.21.5",
     "titleLang": {
       "de": "Abfallmanager",
-      "en": "Waste Manager"
+      "en": "Waste Manager",
+      "ru": "Менеджер вывоза отходов",
+      "pt": "Gestor de resíduos",
+      "nl": "Afvalbeheer",
+      "fr": "Gestion des déchets",
+      "it": "Gestione rifiuti",
+      "es": "Gestor de residuos",
+      "pl": "Menedżer odpadów",
+      "uk": "Менеджер відходів",
+      "zh-cn": "垃圾收集管理"
     },
     "desc": {
       "de": "Lokale Abfuhrtermine aus ICS und manuellen Einträgen",
-      "en": "Local waste pickup schedule from ICS and manual entries"
+      "en": "Local waste pickup schedule from ICS and manual entries",
+      "ru": "График вывоза отходов из ICS и ручных записей",
+      "pt": "Calendário local de recolha de resíduos via ICS e entradas manuais",
+      "nl": "Lokale afvalophaaldagen via ICS en handmatige invoer",
+      "fr": "Calendrier local de collecte des déchets via ICS et saisie manuelle",
+      "it": "Calendario locale di raccolta rifiuti da ICS e inserimenti manuali",
+      "es": "Calendario local de recogida de residuos mediante ICS y entradas manuales",
+      "pl": "Lokalny harmonogram odbioru odpadów z ICS i wpisów ręcznych",
+      "uk": "Місцевий графік вивезення відходів з ICS і ручних записів",
+      "zh-cn": "通过 ICS 和手动录入管理本地垃圾收集日程"
     },
     "authors": [
       "Andre Rudat"
     ],
-    "license": "MIT",
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "type": "date-and-time",
@@ -26,7 +43,7 @@
       "config": "json"
     },
     "icon": "abfallmanager.svg",
-    "extIcon": "",
+    "extIcon": "https://raw.githubusercontent.com/Xbrrudi/ioBroker.abfallmanager/main/admin/abfallmanager.svg",
     "readme": "",
     "tier": 3,
     "supportCustoms": false,
@@ -53,7 +70,26 @@
     },
     "restartAdapters": [
       "vis-2"
-    ]
+    ],
+    "keywords": [
+      "Abfall",
+      "Müllabfuhr",
+      "Abfuhrkalender",
+      "ICS",
+      "VIS-2",
+      "waste collection",
+      "calendar"
+    ],
+    "news": {
+      "0.21.5": {
+        "en": "Improve adapter metadata and publication checks",
+        "de": "Adapter-Metadaten und Veröffentlichungsprüfungen verbessert"
+      }
+    },
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    }
   },
   "native": {
     "icsText": "",
@@ -96,5 +132,5 @@
   },
   "objects": [],
   "instanceObjects": [],
-  "version": "0.21.4"
+  "version": "0.21.5"
 }
