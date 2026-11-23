@@ -81,7 +81,7 @@
       "calendar"
     ],
     "news": {
-      "0.21.5": {
+      "0.21.4": {
         "en": "Improve adapter metadata and publication checks",
         "de": "Adapter-Metadaten und Veröffentlichungsprüfungen verbessert"
       }
