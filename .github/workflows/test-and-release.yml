@@ -147,7 +147,14 @@ jobs:
           if ! gh release view "$GITHUB_REF_NAME" > /dev/null; then
             gh release create "$GITHUB_REF_NAME" "$archive" --verify-tag --generate-notes "${release_args[@]}"
           else
-            gh release upload "$GITHUB_REF_NAME" "$archive" --clobber
+            assets="$(gh release view "$GITHUB_REF_NAME" --json assets --jq '.assets[].name')"
+            if grep -Fxq "$tarball" <<< "$assets"; then
+              downloaded="$(mktemp -d)"
+              gh release download "$GITHUB_REF_NAME" --pattern "$tarball" --dir "$downloaded"
+              cmp "$archive" "$downloaded/$tarball"
+            else
+              gh release upload "$GITHUB_REF_NAME" "$archive"
+            fi
             if [[ "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)" == true ]]; then
               gh release edit "$GITHUB_REF_NAME" --draft=false
             fi
