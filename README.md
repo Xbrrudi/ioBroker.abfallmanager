@@ -8,15 +8,13 @@ Waste Manager processes local waste collection calendars. It combines iCalendar 
 
 The adapter requires Node.js 22.19.0 or later, js-controller 7.0.0 or later, and Admin 8.0.0 or later. The optional widget requires VIS 2. The package includes the built Admin components and their Module Federation manifest.
 
-[Version 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) is available on npm. Before the adapter is listed in ioBroker Latest, install the published package from the ioBroker installation directory:
+Once the adapter is listed in ioBroker Latest, select the Latest (beta) repository in Admin, refresh the adapter list and add an **Abfallmanager** instance. With Latest selected, the ioBroker CLI can also add the instance:
 
 ```sh
-npm install iobroker.abfallmanager@0.21.7 --omit=dev
-iobroker upload abfallmanager
 iobroker add abfallmanager
 ```
 
-To install from a local release archive, use `npm install /path/to/archive.tgz --omit=dev` for the first step. If an instance already exists, restart it after uploading. Instance settings are retained, and updates do not import sample dates.
+[Version 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) is already published. Use Admin to update an existing instance. Updates retain instance settings and do not import sample dates.
 
 ## Configure waste types and collection dates
 
@@ -81,5 +79,7 @@ The tag-triggered release workflow checks version metadata, tests, builds, schem
 - Automated npm and GitHub releases with a tag-triggered GitHub Actions workflow.
 
 ## License
+
+Copyright (c) 2026 Andre Rudat and Abfallmanager contributors
 
 [MIT](LICENSE)

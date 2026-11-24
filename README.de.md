@@ -12,17 +12,13 @@ Native Konfiguration für ioBroker Admin 8 (GUI API 2). Das Installationspaket e
 
 Der Adapter setzt Node.js ab 22.19.0, js-controller ab 7.0.0 und Admin ab 8.0.0 voraus. Für das optionale Widget wird VIS 2 benötigt.
 
-[Version 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) ist auf npm verfügbar. Vor der Aufnahme ins Latest-Repository lässt sie sich per npm-Paket im ioBroker-Installationsverzeichnis installieren:
+Nach der Aufnahme in ioBroker Latest in Admin das Repository **Latest (Beta)** auswählen, die Adapterliste aktualisieren und eine Instanz von **Abfallmanager** hinzufügen. Bei ausgewähltem Latest-Repository geht das auch über die ioBroker-Kommandozeile:
 
 ```sh
-npm install iobroker.abfallmanager@0.21.7 --omit=dev
-iobroker upload abfallmanager
 iobroker add abfallmanager
 ```
 
-Für ein lokales Release-Archiv stattdessen `npm install /pfad/zum/archiv.tgz --omit=dev` verwenden.
-
-Bei vorhandener Instanz den letzten Befehl auslassen und die Instanz neu starten. Die bestehende Instanzkonfiguration bleibt erhalten. Bei einem Update werden keine Standardtermine importiert.
+[Version 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) ist bereits veröffentlicht. Vorhandene Instanzen über Admin aktualisieren. Die bestehende Instanzkonfiguration bleibt erhalten. Bei einem Update werden keine Standardtermine importiert.
 
 ## Bedienung
 
