@@ -1,9 +1,7 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_dispatch: {}
 
 permissions: {}
 
@@ -13,6 +11,8 @@ concurrency:
 
 jobs:
   verify:
+    # Retired publisher: disable this workflow in GitHub Actions as well.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -114,7 +114,7 @@ jobs:
             const tarball = process.env.TARBALL;
             const version = process.env.GITHUB_REF_NAME.slice(1);
             const registry = 'https://registry.npmjs.org';
-            const response = await fetch(`${registry}/iobroker.abfallmanager/${version}`, {
+            const response = await fetch(`${registry}/iobroker.wastemanager/${version}`, {
               signal: AbortSignal.timeout(30_000)
             });
 

@@ -8,13 +8,13 @@ Waste Manager processes local waste collection calendars. It combines iCalendar 
 
 The adapter requires Node.js 22.19.0 or later, js-controller 7.0.0 or later, and Admin 8.0.0 or later. The optional widget requires VIS 2. The package includes the built Admin components and their Module Federation manifest.
 
-Once the adapter is listed in ioBroker Latest, select the Latest (beta) repository in Admin, refresh the adapter list and add an **Abfallmanager** instance. With Latest selected, the ioBroker CLI can also add the instance:
+Once the adapter is listed in ioBroker Latest, select the Latest (beta) repository in Admin, refresh the adapter list and add a **Waste Manager** instance. With Latest selected, the ioBroker CLI can also add the instance:
 
 ```sh
-iobroker add abfallmanager
+iobroker add wastemanager
 ```
 
-[Version 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) is already published. Use Admin to update an existing instance. Updates retain instance settings and do not import sample dates.
+**The renamed package is not published yet.** These installation commands apply after publication and Latest admission. The existing [iobroker.abfallmanager 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) remains available. Switching to the new name requires a new instance and explicit migration; follow [MIGRATION.md](MIGRATION.md) to retain dates, settings and VIS-2 projects. Do not remove the old instance.
 
 ## Configure waste types and collection dates
 
@@ -31,7 +31,7 @@ Automatic cleanup runs on startup and on the first minute tick after the local d
 
 ## States and VIS 2
 
-The adapter exposes these states under `abfallmanager.N`, where `N` is the instance number.
+The adapter exposes these states under `wastemanager.N`, where `N` is the instance number.
 
 | States | Contents |
 | --- | --- |
@@ -44,7 +44,7 @@ The adapter exposes these states under `abfallmanager.N`, where `N` is the insta
 
 The visibility window applies to the next pickup date. In **Display in VIS 2** (*Anzeige in VIS 2*), set how many days in advance to display bins (0–30, default 2) and the local hour to hide them on pickup day (0–24, default 18).
 
-Add the native **Abfallmanager** widget in the VIS 2 editor. It reads `display.json` through the existing VIS connection. Choose the instance, bin width and height, spacing, shadow, labels, font size and color, and what to show when no bin is due. The four transparent bin images appear from left to right in this order: residual waste, recyclables, organic waste and paper. Visible bins share a baseline and hidden bins take up no space.
+Add the native **Waste Manager** widget in the VIS 2 editor. It reads `display.json` through the existing VIS connection. Choose the instance, bin width and height, spacing, shadow, labels, font size and color, and what to show when no bin is due. The four transparent bin images appear from left to right in this order: residual waste, recyclables, organic waste and paper. Visible bins share a baseline and hidden bins take up no space.
 
 The widget draws the images in an SVG at their configured CSS pixel dimensions. A larger VIS frame provides more room, while a smaller frame can clip the content. Resize the frame in the editor as needed. New widgets start at left/top 0%, width 60% and height 35%. Existing widgets retain their styles, including pixel-based positions and dimensions. For affected projects with a frame that jumps when using percentage dimensions, see the separate [VIS 2 compatibility notes](compat/README.md) and [test report](TESTBERICHT.md).
 
@@ -64,13 +64,21 @@ npm run preflight:widgets
 npm pack
 ```
 
-The GitHub Actions test workflow validates the package and tests installation, startup and shutdown with js-controller 7.2.5 on Node.js 22 and 24. The additional `npm run test:browser` and `npm run test:controller` checks use a separate installation pointed to by `IOBROKER_TEST_ROOT`, with Admin 8.3.5 on `127.0.0.1:18081`, js-controller 7.2.5 and an Abfallmanager test instance. These checks modify the test instance configuration. Reports go to `TEST_OUTPUT_DIR` or `test-results/`. See the [test report](TESTBERICHT.md) for previous results.
+The GitHub Actions test workflow validates the package and tests installation, startup and shutdown with js-controller 7.2.5 on Node.js 22, 24 and 26 across Ubuntu, Windows and macOS. The additional `npm run test:browser` and `npm run test:controller` checks use a separate installation pointed to by `IOBROKER_TEST_ROOT`, with Admin 8.3.5 on `127.0.0.1:18081`, js-controller 7.2.5 and a Waste Manager test instance. These checks modify the test instance configuration. Reports go to `TEST_OUTPUT_DIR` or `test-results/`. See the [test report](TESTBERICHT.md) for previous results.
 
 ## Releases
+
+See [the manual rename and publication procedure](RENAME-RELEASE.md). Version 0.21.7 is unchanged in this PR; a version increase and release require separate approval. The retired `release.yml` must be disabled in GitHub Actions. Future releases use `test-and-release.yml`.
+
 
 The tag-triggered release workflow checks version metadata, tests, builds, schemas and package contents before publishing the verified archive through npm Trusted Publishing and attaching it to the GitHub release. For a partial workflow failure, use **Re-run failed jobs** to reuse the verified archive from that run. If the npm version already exists, the workflow checks its integrity against the archive.
 
 ## Changelog
+
+### Unreleased
+
+- Rename the adapter, package, Admin and VIS-2 registration to `wastemanager` (English: Waste Manager; German: Abfallmanager), without changing functionality or widget layout.
+- Document migration with retained calendars, manual entries, settings and a rollback path; keep the old package available.
 
 ### 0.21.7
 

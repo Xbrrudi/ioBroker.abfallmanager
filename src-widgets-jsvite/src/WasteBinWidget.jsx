@@ -3,16 +3,16 @@ import rest from './assets/rest.png';
 import gelb from './assets/gelb.png';
 import bio from './assets/bio.png';
 import papier from './assets/papier.png';
-import icon from './assets/abfallmanager.svg';
+import icon from './assets/wastemanager.svg';
 import {TYPES,NAMES,instanceId,readDisplay,daysLeft,layout} from './model.mjs';
 const IMAGES={rest,gelb,bio,papier};
 export default class WasteBinWidget extends window.visRxWidget {
- static getI18nPrefix(){return 'abfallmanager_';}
+ static getI18nPrefix(){return 'wastemanager_';}
  static getWidgetInfo(){return {
-  id:'tplAbfallmanagerBin',visSet:'abfallmanager',visSetLabel:'Abfallmanager',visSetColor:'#65873b',visSetIcon:icon,visName:'Mülltonnen',visPrev:gelb,
+  id:'tplWastemanagerBin',visSet:'wastemanager',visSetLabel:'Abfallmanager',visSetColor:'#65873b',visSetIcon:icon,visName:'Mülltonnen',visPrev:gelb,
   visDefaultStyle:{left:'0%',top:'0%',width:'60%',height:'35%',position:'absolute',background:'transparent'},
   visAttrs:[
-   {name:'source',label:'Datenquelle',fields:[{name:'instance',label:'Abfallmanager-Instanz',type:'instance',adapter:'abfallmanager',default:'abfallmanager.0'}]},
+   {name:'source',label:'Datenquelle',fields:[{name:'instance',label:'Abfallmanager-Instanz',type:'instance',adapter:'wastemanager',default:'wastemanager.0'}]},
    {name:'appearance',label:'Mülltonnen',fields:[
     {name:'binWidth',label:'Tonnenbreite (Verhältnis)',type:'number',min:20,max:1000,default:120},
     {name:'binHeight',label:'Tonnenhöhe (Verhältnis)',type:'number',min:30,max:1500,default:185},
@@ -60,7 +60,7 @@ export default class WasteBinWidget extends window.visRxWidget {
   const geometry=layout(data,rows.length);
   const color=data.textColor||'#ffffff';
   if(!rows.length){
-   if(data.emptyMode==='message')return <div className="vis-widget-body abfallmanager-empty" role="status" style={{background:'transparent',color,fontSize:geometry.fontSize}}>{data.emptyText||'Keine Abholung im Anzeigezeitraum'}</div>;
+   if(data.emptyMode==='message')return <div className="vis-widget-body wastemanager-empty" role="status" style={{background:'transparent',color,fontSize:geometry.fontSize}}>{data.emptyText||'Keine Abholung im Anzeigezeitraum'}</div>;
    return null;
   }
   const textHeight=data.showText?geometry.fontSize*4.5:0;
@@ -69,11 +69,11 @@ export default class WasteBinWidget extends window.visRxWidget {
   // VIS owns the outer position and size. The SVG uses the complete widget body as its
   // viewport and scales its internal coordinates uniformly, keeping the bins bottom-left.
   // Existing bin dimensions are retained as relative proportions for saved projects.
-  return <div className="vis-widget-body abfallmanager-widget" data-instance={instanceId(data.instance)} data-preview={preview?'true':'false'} style={{position:'relative',background:'transparent',overflow:'hidden',pointerEvents:'none'}}>
+  return <div className="vis-widget-body wastemanager-widget" data-instance={instanceId(data.instance)} data-preview={preview?'true':'false'} style={{position:'relative',background:'transparent',overflow:'hidden',pointerEvents:'none'}}>
    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox={'0 0 '+canvasWidth+' '+canvasHeight} preserveAspectRatio="xMinYMax meet" style={{position:'absolute',inset:0,display:'block',width:'100%',height:'100%',overflow:'hidden',background:'transparent',fontFamily:'inherit'}} role="img" aria-label={preview?'Vorschau Mülltonnen':rows.map(e=>NAMES[e.type]).join(', ')}>
     {rows.map((e,index)=>{
      const x=index*(geometry.width+geometry.gap);const left=e.date?daysLeft(e.date):null;
-     return <g key={e.type} className="abfallmanager-bin" data-type={e.type} data-date={e.date}>
+     return <g key={e.type} className="wastemanager-bin" data-type={e.type} data-date={e.date}>
       <image href={IMAGES[e.type]} x={x} y="0" width={geometry.width} height={geometry.height} preserveAspectRatio="xMidYMid meet" style={{filter:data.showShadow===false?'none':`drop-shadow(2px 5px 3px rgba(0,0,0,${geometry.shadow}))`}}/>
       <title>{NAMES[e.type]+(e.date?' – '+e.date:'')}</title>
       {data.showText&&<text x={x+geometry.width/2} y={geometry.height+geometry.fontSize+4} textAnchor="middle" fill={color} fontSize={geometry.fontSize}>
@@ -84,7 +84,7 @@ export default class WasteBinWidget extends window.visRxWidget {
      </g>;
     })}
    </svg>
-   {edit&&(preview||this.state.collectionError)&&<span className="abfallmanager-editor-hint" style={{position:'absolute',top:0,left:0,fontSize:11,color:'#666',pointerEvents:'none'}}>{this.state.collectionError||'Vorschau – aktuell keine fälligen Termine'}</span>}
+   {edit&&(preview||this.state.collectionError)&&<span className="wastemanager-editor-hint" style={{position:'absolute',top:0,left:0,fontSize:11,color:'#666',pointerEvents:'none'}}>{this.state.collectionError||'Vorschau – aktuell keine fälligen Termine'}</span>}
   </div>;
  }
 }

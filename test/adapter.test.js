@@ -2,9 +2,9 @@
 const {test}=require('node:test');const assert=require('node:assert/strict');const fs=require('node:fs');const vm=require('node:vm');const {createRequire}=require('node:module');
 const localRequire=createRequire(require.resolve('../main'));const {wrap}=require('../lib/ics-blocks');
 async function harness(config,initial){
- let clock=initial,tick;const states=new Map(),logs=[];const instance={_id:'system.adapter.abfallmanager.0',native:structuredClone(config)};let writes=0;
+ let clock=initial,tick;const states=new Map(),logs=[];const instance={_id:'system.adapter.wastemanager.0',native:structuredClone(config)};let writes=0;
  class FakeDate extends Date {constructor(...args){super(...(args.length?args:[clock]));}}
- class Adapter{constructor(){this.namespace='abfallmanager.0';this.config=structuredClone(config);this.log={warn:m=>logs.push(m),error:m=>logs.push(m),info:()=>{}};}on(){}async getForeignObjectAsync(){return structuredClone(instance);}async setForeignObjectAsync(id,value){instance.native=structuredClone(value.native);writes++;}async setObjectNotExistsAsync(){}async subscribeStatesAsync(){}async setStateAsync(id,value){states.set(id,value);}}
+ class Adapter{constructor(options){assert.equal(options.name,'wastemanager');this.namespace=options.name+'.0';this.config=structuredClone(config);this.log={warn:m=>logs.push(m),error:m=>logs.push(m),info:()=>{}};}on(){}async getForeignObjectAsync(){return structuredClone(instance);}async setForeignObjectAsync(id,value){instance.native=structuredClone(value.native);writes++;}async setObjectNotExistsAsync(){}async subscribeStatesAsync(){}async setStateAsync(id,value){states.set(id,value);}}
  const context={require:name=>name==='@iobroker/adapter-core'?{Adapter}:localRequire(name),module:{exports:{}},Date:FakeDate,setInterval:fn=>{tick=fn;return 1;},clearInterval:()=>{}};
  vm.runInNewContext(fs.readFileSync(require.resolve('../main'),'utf8'),context);const adapter=new context.module.exports();await adapter.onReady();return {adapter,states,logs,instance,writes:()=>writes,setTime:v=>clock=v,tick:()=>tick()};
 }
@@ -14,4 +14,26 @@ test('Täglicher Timer bereinigt genau nach Kalenderwechsel und erhält Einstell
 });
 test('Deaktivierte Bereinigung lässt gespeicherte Alttermine unverändert',async()=>{
  const cfg=structuredClone(require('../io-package.json').native);cfg.autoCleanup=false;cfg.manualEntries=JSON.stringify([{date:'2020-01-01',type:'rest',title:'Alt'}]);const h=await harness(cfg,new Date(2027,0,4).getTime());assert.equal(h.writes(),0);assert.equal(typeof h.instance.native.manualEntries,'string');assert.deepEqual(h.logs,[]);
+});
+
+test('Kopierte Alt-Konfiguration erhält ICS-Typzuweisung, manuelle Korrekturen und Einstellungen',async()=>{
+ const config=structuredClone(require('../io-package.json').native);
+ config.autoCleanup=false;
+ config.icsText='BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//ioBroker//Abfallmanager//DE\nBEGIN:VEVENT\nUID:legacy-explicit-type\nDTSTART;VALUE=DATE:20270104\nSUMMARY:Sonderabholung\nX-ABFALLMANAGER-TYPE:papier\nEND:VEVENT\nEND:VCALENDAR';
+ config.manualEntries=JSON.stringify([{date:'2027-01-06',originalDate:'2027-01-05',action:'move',type:'rest',title:'Verschoben'},{date:'2020-01-01',type:'bio',title:'Archiv'}]);
+ config.importedEntries=[{date:'2027-01-04',type:'papier',title:'Sonderabholung'}];
+ config.daysBefore=7;config.hideHour=20;config.retentionDays=30;
+ config.bins.forEach(bin=>bin.enabled=true);config.customSetting='keep';
+ const original=structuredClone(config);
+ const h=await harness(config,new Date(2027,0,3,12).getTime());
+ assert.equal(h.writes(),0);assert.deepEqual(h.instance.native,original);assert.deepEqual(config,original);
+ assert.equal(require('../lib/schedule').parseIcs(h.instance.native.icsText).entries[0].uid,'legacy-explicit-type');
+ const schedule=JSON.parse(h.states.get('schedule.json').val);
+ assert.ok(schedule.some(e=>e.date==='2027-01-04'&&e.type==='papier'));
+ assert.ok(schedule.some(e=>e.date==='2027-01-06'&&e.type==='rest'));
+ assert.ok(schedule.some(e=>e.date==='2020-01-01'&&e.type==='bio'));
+ assert.equal(h.states.get('status.imported').val,1);assert.equal(h.states.get('status.manual').val,2);
+ assert.equal(h.states.get('bins.papier.image').val,'/adapter/wastemanager/papier.png');
+ assert.ok(JSON.parse(h.states.get('display.json').val).every(e=>e.image.startsWith('/adapter/wastemanager/')));
+ assert.deepEqual(h.logs,[]);
 });

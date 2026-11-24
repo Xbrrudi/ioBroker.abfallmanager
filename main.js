@@ -3,9 +3,9 @@ const utils = require('@iobroker/adapter-core');
 const {parseIcs,parseManual,resolve,calculate,pruneIcs,pruneManual} = require('./lib/schedule');
 const {previewImport,commitImport} = require('./lib/importer');
 const {list,mutate} = require('./lib/entries');
-class Abfallmanager extends utils.Adapter {
+class Wastemanager extends utils.Adapter {
     constructor(options = {}) {
-        super({...options, name:'abfallmanager'});
+        super({...options, name:'wastemanager'});
         this.on('ready', () => this.onReady());
         this.on('stateChange', (id, state) => this.onStateChange(id, state));
         this.on('message', obj => this.onMessage(obj));
@@ -130,7 +130,7 @@ class Abfallmanager extends utils.Adapter {
         await this.state('next.types',JSON.stringify(result.next.map(e=>e.type)),'string','json');
         await this.state('display.visible',result.visible.length > 0,'boolean','indicator');
         await this.state('display.types',JSON.stringify(result.visible.map(e=>e.type)),'string','json');
-        const displayed = result.visible.filter((e,i,a)=>a.findIndex(x=>x.type===e.type)===i).map(e=>({ ...e, image:`/adapter/abfallmanager/${e.type}.png` }));
+        const displayed = result.visible.filter((e,i,a)=>a.findIndex(x=>x.type===e.type)===i).map(e=>({ ...e, image:`/adapter/wastemanager/${e.type}.png` }));
         await this.state('display.json',JSON.stringify(displayed), 'string','json');
         await this.state('display.count',displayed.length,'number');
         // Stable per-bin datapoints for individual VIS widgets. Create states even if inactive.
@@ -141,9 +141,9 @@ class Abfallmanager extends utils.Adapter {
             const next = this.schedule.find(e => e.type === id && e.date >= result.today);
             await this.state(`bins.${id}.visible`,Boolean(item),'boolean','indicator');
             await this.state(`bins.${id}.date`,next ? next.date : '', 'string','text');
-            await this.state(`bins.${id}.image`,`/adapter/abfallmanager/${id}.png`,'string','text');
+            await this.state(`bins.${id}.image`,`/adapter/wastemanager/${id}.png`,'string','text');
         }
     }
 }
-if (require.main === module) new Abfallmanager();
-module.exports = Abfallmanager;
+if (require.main === module) new Wastemanager();
+module.exports = Wastemanager;

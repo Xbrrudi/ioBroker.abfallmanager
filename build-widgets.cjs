@@ -2,11 +2,11 @@
 const {execFileSync}=require('node:child_process');const {createRequire}=require('node:module');const fs=require('node:fs');const path=require('node:path');
 const root=__dirname,source=path.join(root,'src-widgets-jsvite');const req=createRequire(path.join(source,'package.json'));
 execFileSync(process.execPath,[path.join(path.dirname(req.resolve('vite/package.json')),'bin/vite.js'),'build'],{cwd:source,stdio:'inherit'});
-const out=path.join(root,'widgets/abfallmanager');fs.unlinkSync(path.join(out,'index.html'));
+const out=path.join(root,'widgets/wastemanager');fs.unlinkSync(path.join(out,'index.html'));
 const manifest=JSON.parse(fs.readFileSync(path.join(out,'mf-manifest.json'),'utf8'));
-if(manifest.name!=='vis2AbfallmanagerWidgets')throw Error('Falscher Federation-Name');
+if(manifest.name!=='vis2WastemanagerWidgets')throw Error('Falscher Federation-Name');
 const ioPath=path.join(root,'io-package.json'),io=JSON.parse(fs.readFileSync(ioPath,'utf8'));
 delete io.common.bundlerType;
-io.common.visWidgets={vis2AbfallmanagerWidgets:{name:'vis2AbfallmanagerWidgets',i18n:'component',url:'abfallmanager/customWidgets.js',bundlerType:'module',components:['WasteBinWidget']}};
+io.common.visWidgets={vis2WastemanagerWidgets:{name:'vis2WastemanagerWidgets',i18n:'component',url:'wastemanager/customWidgets.js',bundlerType:'module',components:['WasteBinWidget']}};
 fs.writeFileSync(ioPath,JSON.stringify(io,null,2)+'\n');
 console.log('Natives VIS-2-Widget gebaut: ESM-Einstieg und Manifest registriert.');

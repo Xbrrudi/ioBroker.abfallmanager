@@ -1,3 +1,23 @@
+# Umbenennung auf wastemanager – Prüfstand 24. November 2026
+
+Geprüft unter Node.js 24.22.3 auf Linux, Version unverändert 0.21.7:
+
+- Namensprüfung: npm und GitHub-Ziel jeweils HTTP 404; kein `wastemanager` in offiziellen Latest-/Stable-Listen. Das bisherige `iobroker.abfallmanager@0.21.7` ist mit HTTP 200 weiterhin verfügbar.
+- Admin- und VIS-2-Produktionsbuild erfolgreich; neue Federation-Namen `WastemanagerSet` / `vis2WastemanagerWidgets`, Widget-Ausgabe unter `widgets/wastemanager`.
+- `npm test`: 31 Tests bestanden. Einschließlich kopierter Alt-Konfiguration mit ICS-Typzuweisung, UID, älterem manuellen JSON-Format, verschobenem Termin, Altterminen und individuellen Einstellungen bei deaktivierter Bereinigung. Keine Konfigurationsschreibvorgänge im Migrationserhalt-Test.
+- `npm run test:package`: 55 Prüfungen bestanden, einschließlich offizieller Paket-/io-package-/Admin-Schemas.
+- `npm run test:integration`: isolierte Installation mit js-controller 7.2.5; Start als `wastemanager.0` und anschließender Stopp erfolgreich (1 Test).
+- `npm run check`, `npm run preflight:widgets` und `git diff --check` erfolgreich.
+- `npm pack --ignore-scripts`: neues Paket `iobroker.wastemanager-0.21.7.tgz` geprüft, nicht veröffentlicht. Enthält beide README-Dateien, Migration, manuelle Veröffentlichungsschritte und gebaute Oberflächen; keine alten Widget-Verzeichnisse oder Icon-Dateinamen. Schema-/Preflight-Prüfungen auch aus dem entpackten Archiv erfolgreich.
+
+Das Widget-Layout und alle vorhandenen historischen Changelog-/News-Einträge bleiben erhalten. Der gespeicherte ICS-Schlüssel `X-ABFALLMANAGER-TYPE` bleibt zur Datenkompatibilität erhalten. Keine Live-Instanz oder Benutzerdatei wurde migriert oder gelöscht.
+
+Grenzen: Kein neuer Browserlauf mit echtem Admin/VIS-2-Projekt; die projektbezogene Migration ist mit einem Betreiberexport gemäß MIGRATION.md abzunehmen. Die GitHub-Matrix für Node.js 22/24/26 × Ubuntu/Windows/macOS bleibt unverändert; die lokalen Ergebnisse sind kein Nachweis für diese neun CI-Kombinationen. Die neue GitHub-/Raw-URL ist erst nach manueller Repository-Umbenennung verfügbar. npm-Publishing, Trusted Publishing und Release-Tag wurden nicht ausgeführt.
+
+Die folgenden historischen Prüfergebnisse bleiben als solche erhalten.
+
+---
+
 # Prüfbericht – ioBroker Abfallmanager 0.21.3
 
 Prüfdatum: 19. November 2026. Reparaturbasis: vorhandenes `iobroker.abfallmanager-0.21.2.tgz`, weiterbearbeitet unter `work/v0213/package`. Keine Neuimplementierung des Adapters.

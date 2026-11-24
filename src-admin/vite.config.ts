@@ -4,7 +4,7 @@ import { moduleFederationShared } from '@iobroker/gui-components/modulefederatio
 const shared=moduleFederationShared(['react','react-dom','@iobroker/gui-components','@iobroker/json-config']);
 for(const value of Object.values(shared)) value.import=false;
 export default {
- plugins:[federation({manifest:true,dts:false,name:'AbfallmanagerSet',filename:'customComponents.js',exposes:{'./Components':'./src/Components.jsx'},shared}),react()],
+ plugins:[federation({manifest:true,dts:false,name:'WastemanagerSet',filename:'customComponents.js',exposes:{'./Components':'./src/Components.jsx'},shared}),react()],
  base:'./',build:{target:'chrome89',outDir:'../admin/custom',emptyOutDir:true}
 };
 

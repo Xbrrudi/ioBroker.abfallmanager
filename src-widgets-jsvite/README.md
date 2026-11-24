@@ -1,7 +1,5 @@
-# VIS-2 Widget-Quellcode (experimentell)
+# Waste Manager VIS-2 widget
 
-Dieses Verzeichnis enthält einen **ungebauten** React/Vite-Prototypen. Er ist bewusst noch **nicht** in `io-package.json` registriert: ohne gebautes `widgets/abfallmanager/customWidgets.js` wäre eine Registrierung irreführend und könnte VIS-2-Ladefehler verursachen.
+React/Vite source for the native widget registered in `io-package.json`. Build with `npm run build:widgets` from the repository root; output is `widgets/wastemanager/customWidgets.js` and its Module Federation assets. The component remains `WasteBinWidget`.
 
-Offizielle Vorlage: https://github.com/ioBroker/ioBroker.vis-2-widgets-react-template
-
-Nächste Schritte: Abgleich der Widget-Klassen-API mit der installierten VIS-2-Version, `npm install` im Verzeichnis, `npm run build`, Bundle prüfen, dann `common.visWidgets` ergänzen und reale VIS-2-Installation testen. Der Quellcode allein ist **kein** installierbares Widgetset.
+See [migration instructions](../MIGRATION.md) for existing projects and the root README for usage. The displayed name is Waste Manager in English and Abfallmanager in German.

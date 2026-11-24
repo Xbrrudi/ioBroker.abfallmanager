@@ -15,10 +15,10 @@ Der Adapter setzt Node.js ab 22.19.0, js-controller ab 7.0.0 und Admin ab 8.0.0 
 Nach der Aufnahme in ioBroker Latest in Admin das Repository **Latest (Beta)** auswählen, die Adapterliste aktualisieren und eine Instanz von **Abfallmanager** hinzufügen. Bei ausgewähltem Latest-Repository geht das auch über die ioBroker-Kommandozeile:
 
 ```sh
-iobroker add abfallmanager
+iobroker add wastemanager
 ```
 
-[Version 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) ist bereits veröffentlicht. Vorhandene Instanzen über Admin aktualisieren. Die bestehende Instanzkonfiguration bleibt erhalten. Bei einem Update werden keine Standardtermine importiert.
+**Das umbenannte Paket ist noch nicht veröffentlicht.** Die Installationsbefehle gelten nach Veröffentlichung und Aufnahme in Latest. Das bisherige [iobroker.abfallmanager 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) bleibt verfügbar. Der Namenswechsel benötigt eine neue Instanz und eine gezielte Migration. [MIGRATION.md](MIGRATION.md) beschreibt die Übernahme von Terminen, Einstellungen und VIS-2-Projekten. Die alte Instanz nicht löschen.
 
 ## Bedienung
 
@@ -32,7 +32,7 @@ ICS unterstützt einzelne VEVENT-Termine mit Datum oder Datum/Uhrzeit, gefaltete
 
 ## VIS 2
 
-Das native Widget erscheint automatisch unter „Abfallmanager“. Es verwendet Module Federation mit einem ES-Modul-Einstieg und die bestehende VIS-Verbindung. Es liest weiterhin den Datenpunkt `abfallmanager.N.display.json`; die unveränderte Adapterlogik bestimmt das konfigurierbare Zeitfenster und die Ausblendung (standardmäßig ab 18 Uhr am Abholtag).
+Das native Widget erscheint automatisch unter „Abfallmanager“. Es verwendet Module Federation mit einem ES-Modul-Einstieg und die bestehende VIS-Verbindung. Es liest weiterhin den Datenpunkt `wastemanager.N.display.json`; die unveränderte Adapterlogik bestimmt das konfigurierbare Zeitfenster und die Ausblendung (standardmäßig ab 18 Uhr am Abholtag).
 
 Die vier vorhandenen transparenten Fotografie-PNGs werden in einem SVG ausgegeben. SVG-Viewport und ViewBox besitzen dieselben Pixelabmessungen. Tonnenbreite 120 und Tonnenhöhe 185 ergeben daher eine Bildfläche von 120 × 185 CSS-Pixeln. Die äußere Rahmengröße vergrößert diese Bildfläche nicht. Ein zu kleiner Rahmen begrenzt den Inhalt; er lässt sich im normalen VIS-Editor vergrößern.
 
@@ -40,7 +40,7 @@ Die erste sichtbare Tonne beginnt links bei x=0, alle stehen auf derselben Grund
 
 Neue Widgets erhalten über `visDefaultStyle` die Werte left/top 0 %, width 60 % und height 35 %. Bestehende Styles werden nicht migriert oder überschrieben. Auch vorhandene Pixelwerte bleiben erhalten. Die innere SVG-Darstellung verändert weder den äußeren Rahmen noch dessen Drag-/Resize-Verhalten.
 
-Schatten, Beschriftung, Schriftgröße/-farbe, Abstand, Tonnenmaße, Instanz und Leerdarstellung bleiben konfigurierbar. Bestehende VIS-Datenpunkte und Assets bleiben verfügbar.
+Schatten, Beschriftung, Schriftgröße/-farbe, Abstand, Tonnenmaße, Instanz und Leerdarstellung bleiben konfigurierbar. Die bisherigen Datenpunkte bleiben bei erhaltener Altinstanz bestehen. Verweise auf die neue Instanz und deren Assets müssen gemäß [Migrationsplan](MIGRATION.md) angepasst werden.
 
 ## Entwicklung und Tests
 
@@ -64,11 +64,16 @@ Siehe TESTBERICHT.md für ausgeführte Prüfungen und Einschränkungen.
 
 ## Veröffentlichung
 
-Nach Freigabe und Merge den passenden Versions-Tag auf den Release-Commit in `main` setzen und zu GitHub übertragen. Der Workflow `release.yml` prüft Versionen, Tests, Builds, Schema und Paketinhalt. GitHub Actions veröffentlicht das geprüfte Tarball per npm Trusted Publishing und hängt es danach an das GitHub-Release an.
+Die [manuellen Schritte zur Umbenennung und Veröffentlichung](RENAME-RELEASE.md) zuerst durchführen. Die Version bleibt in diesem PR bei 0.21.7; Versionserhöhung und Release benötigen eine gesonderte Freigabe. Den alten Workflow `release.yml` in GitHub Actions deaktivieren. Zukünftige freigegebene Releases verwenden `test-and-release.yml`, das Versionen, Tests, Builds, Schema und Paketinhalt prüft und das geprüfte Tarball per Trusted Publishing veröffentlicht.
 
 Bei einem Teilfehler in GitHub Actions **Re-run failed jobs** verwenden, damit die erfolgreichen Jobs und das bereits geprüfte Tarball desselben Laufs wiederverwendet werden. Ist die Version bereits auf npm vorhanden, wird die Integrität mit dem geprüften Tarball verglichen.
 
 ## Changelog
+
+### Unveröffentlicht
+
+- Adapter, npm-Paket, Admin und VIS-2-Registrierung in `wastemanager` umbenannt (Englisch: Waste Manager; Deutsch: Abfallmanager), bei unveränderter Funktion und unverändertem Widget-Layout.
+- Migration mit Erhalt der Kalender, manuellen Termine und Einstellungen sowie Rückweg dokumentiert; altes Paket bleibt verfügbar.
 
 ### 0.21.7
 

@@ -1,0 +1,77 @@
+{
+  "_dist-XMZvvHVn.js": {
+    "file": "assets/dist-XMZvvHVn.js",
+    "name": "dist",
+    "imports": [
+      "_utils-CFiT7tVn.js"
+    ]
+  },
+  "_helpers-DyfPaPWy.js": {
+    "file": "assets/helpers-DyfPaPWy.js",
+    "name": "helpers",
+    "imports": [
+      "_utils-CFiT7tVn.js"
+    ]
+  },
+  "_utils-CFiT7tVn.js": {
+    "file": "assets/utils-CFiT7tVn.js",
+    "name": "utils"
+  },
+  "_vite-preload-helper-D97eqSzU.js": {
+    "file": "assets/vite-preload-helper-D97eqSzU.js",
+    "name": "vite-preload-helper"
+  },
+  "src/Components.jsx": {
+    "file": "assets/Components-CG2jBn4z.js",
+    "name": "Components",
+    "src": "src/Components.jsx",
+    "isEntry": true
+  },
+  "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__WastemanagerSet__customComponents_js": {
+    "file": "customComponents.js",
+    "name": "remoteEntry",
+    "src": "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__WastemanagerSet__customComponents_js",
+    "imports": [
+      "_dist-XMZvvHVn.js",
+      "_helpers-DyfPaPWy.js",
+      "_vite-preload-helper-D97eqSzU.js"
+    ],
+    "dynamicImports": [
+      "src/Components.jsx",
+      "virtual:mf-localSharedImportMap:__mfe_internal__WastemanagerSet__mf_owner__1"
+    ]
+  },
+  "virtual:mf-localSharedImportMap:__mfe_internal__WastemanagerSet__mf_owner__1": {
+    "file": "assets/_virtual_mf-localSharedImportMap___mfe_internal__WastemanagerSet__mf_owner__1-BypMqFkU.js",
+    "name": "_virtual_mf-localSharedImportMap___mfe_internal__WastemanagerSet__mf_owner__1",
+    "src": "virtual:mf-localSharedImportMap:__mfe_internal__WastemanagerSet__mf_owner__1",
+    "isDynamicEntry": true,
+    "imports": [
+      "_dist-XMZvvHVn.js"
+    ]
+  },
+  "virtual:mf:__mfe_internal__WastemanagerSet__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js": {
+    "file": "assets/hostInit-r0j0w0-W.js",
+    "name": "hostInit",
+    "src": "virtual:mf:__mfe_internal__WastemanagerSet__mf_owner__1__H_A_I__hostAutoInit__H_A_I__.js",
+    "imports": [
+      "_helpers-DyfPaPWy.js",
+      "_vite-preload-helper-D97eqSzU.js"
+    ],
+    "dynamicImports": [
+      "virtual:mf-REMOTE_ENTRY_ID:__mfe_internal__WastemanagerSet__customComponents_js",
+      "virtual:mf-localSharedImportMap:__mfe_internal__WastemanagerSet__mf_owner__1"
+    ]
+  },
+  "virtual:mf:__mfe_internal__WastemanagerSet__mf_owner__1__P_S__pendingShares__P_S__.js": {
+    "file": "assets/pendingShares-BnsH4Nzu.js",
+    "name": "pendingShares",
+    "src": "virtual:mf:__mfe_internal__WastemanagerSet__mf_owner__1__P_S__pendingShares__P_S__.js",
+    "imports": [
+      "_vite-preload-helper-D97eqSzU.js"
+    ],
+    "dynamicImports": [
+      "virtual:mf-localSharedImportMap:__mfe_internal__WastemanagerSet__mf_owner__1"
+    ]
+  }
+}

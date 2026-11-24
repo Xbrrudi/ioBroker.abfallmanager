@@ -1,5 +1,5 @@
 {
-  "name": "iobroker.abfallmanager",
+  "name": "iobroker.wastemanager",
   "version": "0.21.7",
   "description": "Local waste collection dates from ICS and manual entries",
   "main": "main.js",
@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Xbrrudi/ioBroker.abfallmanager.git"
+    "url": "git+https://github.com/Xbrrudi/ioBroker.wastemanager.git"
   },
   "keywords": [
     "ioBroker",
@@ -56,6 +56,7 @@
     "preflight.cjs",
     "TESTANLEITUNG.md",
     "MIGRATION.md",
+    "RENAME-RELEASE.md",
     "src-admin/src/",
     "src-admin/package.json",
     "src-admin/package-lock.json",
@@ -72,8 +73,8 @@
     "esbuild": "^0.28.2",
     "playwright": "^1.58.2"
   },
-  "homepage": "https://github.com/Xbrrudi/ioBroker.abfallmanager#readme",
+  "homepage": "https://github.com/Xbrrudi/ioBroker.wastemanager#readme",
   "bugs": {
-    "url": "https://github.com/Xbrrudi/ioBroker.abfallmanager/issues"
+    "url": "https://github.com/Xbrrudi/ioBroker.wastemanager/issues"
   }
 }
