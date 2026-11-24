@@ -64,13 +64,13 @@ Siehe TESTBERICHT.md für ausgeführte Prüfungen und Einschränkungen.
 
 ## Veröffentlichung
 
-Die [manuellen Schritte zur Umbenennung und Veröffentlichung](RENAME-RELEASE.md) zuerst durchführen. Die Version bleibt in diesem PR bei 0.21.7; Versionserhöhung und Release benötigen eine gesonderte Freigabe. Den alten Workflow `release.yml` in GitHub Actions deaktivieren. Zukünftige freigegebene Releases verwenden `test-and-release.yml`, das Versionen, Tests, Builds, Schema und Paketinhalt prüft und das geprüfte Tarball per Trusted Publishing veröffentlicht.
+Die [Anleitung zur Erstveröffentlichung und Migration](RENAME-RELEASE.md) beschreibt den Ablauf für Version 0.21.8. Der bisherige Workflow `release.yml` bleibt in GitHub Actions deaktiviert. Releases verwenden `test-and-release.yml`.
 
 Bei einem Teilfehler in GitHub Actions **Re-run failed jobs** verwenden, damit die erfolgreichen Jobs und das bereits geprüfte Tarball desselben Laufs wiederverwendet werden. Ist die Version bereits auf npm vorhanden, wird die Integrität mit dem geprüften Tarball verglichen.
 
 ## Changelog
 
-### Unveröffentlicht
+### 0.21.8
 
 - Adapter, npm-Paket, Admin und VIS-2-Registrierung in `wastemanager` umbenannt (Englisch: Waste Manager; Deutsch: Abfallmanager), bei unveränderter Funktion und unverändertem Widget-Layout.
 - Migration mit Erhalt der Kalender, manuellen Termine und Einstellungen sowie Rückweg dokumentiert; altes Paket bleibt verfügbar.

@@ -1,7 +1,7 @@
 {
   "name": "wastemanager-admin",
   "private": true,
-  "version": "0.20.0",
+  "version": "0.21.8",
   "type": "module",
   "scripts": {
     "start": "vite --port 4173",

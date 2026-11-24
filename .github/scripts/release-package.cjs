@@ -11,13 +11,20 @@ const adapter = require('../../io-package.json');
 
 async function main() {
     const mode = process.argv[2];
-    const tag = process.env.GITHUB_REF_NAME;
-    assert.match(tag, /^v(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/);
-    const version = tag.slice(1);
-    for (const value of [pkg.version, lock.version, lock.packages[''].version, adapter.common.version]) {
-        assert.equal(value, version, 'Release tag and package versions must match');
+    const version = pkg.version;
+    const workspacePackages = ['src-admin', 'src-widgets-jsvite'].flatMap(directory => {
+        const manifest = require(`../../${directory}/package.json`);
+        const lockfile = require(`../../${directory}/package-lock.json`);
+        return [manifest.version, lockfile.version, lockfile.packages[''].version];
+    });
+    for (const value of [lock.version, lock.packages[''].version, adapter.common.version, ...workspacePackages]) {
+        assert.equal(value, version, 'Package and adapter versions must match');
     }
     assert.ok(!Object.hasOwn(adapter, 'version'), 'Unexpected top-level io-package.json version');
+    assert.ok(Object.hasOwn(adapter.common.news, version), 'Missing release news');
+    if (process.env.GITHUB_REF_TYPE === 'tag' || mode !== 'version') {
+        assert.equal(process.env.GITHUB_REF_NAME, `v${version}`, 'Release tag and package versions must match');
+    }
     if (mode === 'version') return;
     assert.ok(['lookup', 'confirm'].includes(mode), 'Unknown release check');
 
