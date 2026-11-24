@@ -1,0 +1,169 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      tarball: ${{ steps.version.outputs.tarball }}
+      artifact: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Check release versions
+        id: version
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const pkg = require('./package.json');
+          const lock = require('./package-lock.json');
+          const adapter = require('./io-package.json');
+          const tag = process.env.GITHUB_REF_NAME;
+          const version = tag.slice(1);
+
+          if (!/^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(tag) ||
+              [pkg.version, lock.version, lock.packages?.['']?.version, adapter.common.version]
+                .some(value => value !== version) || Object.hasOwn(adapter, 'version')) {
+            throw new Error(`Invalid release metadata for ${tag}`);
+          }
+
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `tarball=${pkg.name}-${version}.tgz\n`);
+          NODE
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm ci --prefix src-admin
+          npm ci --prefix src-widgets-jsvite
+      - name: Test adapter
+        run: npm test
+      - name: Build Admin and VIS 2
+        run: |
+          npm run build:admin
+          npm run build:widgets
+      - name: Check schema and release preflight
+        run: |
+          npm run check
+          npm run preflight:widgets
+      - name: Pack and verify archive
+        env:
+          TARBALL: ${{ steps.version.outputs.tarball }}
+        run: |
+          mkdir release
+          npm pack --pack-destination release
+          unpacked="$(mktemp -d)"
+          tar -xzf "release/$TARBALL" -C "$unpacked"
+          export NODE_PATH="$GITHUB_WORKSPACE/node_modules"
+          cd "$unpacked/package"
+          npm run check
+          npm run preflight:widgets
+      - uses: actions/upload-artifact@v6
+        id: upload
+        with:
+          name: release-${{ github.run_attempt }}
+          path: release/${{ steps.version.outputs.tarball }}
+          if-no-files-found: error
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - uses: actions/download-artifact@v7
+        with:
+          artifact-ids: ${{ needs.verify.outputs.artifact }}
+      - name: Publish verified archive via npm Trusted Publishing
+        env:
+          TARBALL: ${{ needs.verify.outputs.tarball }}
+        run: |
+          npm_version="$(npm --version)"
+          node -e '
+            const [major, minor, patch] = process.argv[1].split(".").map(Number);
+            if (!(major > 11 || major === 11 && (minor > 5 || minor === 5 && patch >= 1))) {
+              throw new Error("npm >= 11.5.1 is required for Trusted Publishing");
+            }
+          ' "$npm_version"
+
+          node <<'NODE'
+          const { createHash } = require('node:crypto');
+          const { execFileSync } = require('node:child_process');
+          const { readFileSync } = require('node:fs');
+
+          async function publish() {
+            const tarball = process.env.TARBALL;
+            const version = process.env.GITHUB_REF_NAME.slice(1);
+            const registry = 'https://registry.npmjs.org';
+            const response = await fetch(`${registry}/iobroker.abfallmanager/${version}`, {
+              signal: AbortSignal.timeout(30_000)
+            });
+
+            if (response.status === 404) {
+              execFileSync('npm', ['publish', `./${tarball}`, '--registry', registry, '--access', 'public'], {
+                stdio: 'inherit'
+              });
+              return;
+            }
+            if (!response.ok) {
+              throw new Error(`npm registry lookup failed with HTTP ${response.status}`);
+            }
+
+            const metadata = await response.json();
+            const integrity = 'sha512-' + createHash('sha512').update(readFileSync(tarball)).digest('base64');
+            if (metadata.dist?.integrity !== integrity) {
+              throw new Error(`npm version ${version} already exists with a different archive`);
+            }
+            console.log(`The verified archive for ${version} is already published on npm`);
+          }
+
+          publish().catch(error => {
+            console.error(error);
+            process.exitCode = 1;
+          });
+          NODE
+
+  github-release:
+    needs: [verify, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          artifact-ids: ${{ needs.verify.outputs.artifact }}
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TARBALL: ${{ needs.verify.outputs.tarball }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" --json isDraft,assets > release.json; then
+            if ! jq -e --arg name "$TARBALL" '.assets | any(.name == $name)' release.json >/dev/null; then
+              gh release upload "$GITHUB_REF_NAME" "$TARBALL"
+            fi
+            if jq -e '.isDraft' release.json >/dev/null; then
+              gh release edit "$GITHUB_REF_NAME" --draft=false
+            fi
+          else
+            gh release create "$GITHUB_REF_NAME" "$TARBALL" --verify-tag --generate-notes
+          fi
