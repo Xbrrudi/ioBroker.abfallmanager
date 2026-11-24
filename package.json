@@ -1,6 +1,6 @@
 {
   "name": "iobroker.wastemanager",
-  "version": "0.21.7",
+  "version": "0.21.8",
   "description": "Local waste collection dates from ICS and manual entries",
   "main": "main.js",
   "author": "Andre Rudat",
@@ -42,6 +42,7 @@
     "assets/",
     "io-package.json",
     "README.md",
+    "README.de.md",
     "LICENSE",
     "vis/",
     "www/",

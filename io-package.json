@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wastemanager",
-    "version": "0.21.7",
+    "version": "0.21.8",
     "titleLang": {
       "de": "Abfallmanager",
       "en": "Waste Manager",
@@ -81,6 +81,19 @@
       "calendar"
     ],
     "news": {
+      "0.21.8": {
+        "en": "First release as iobroker.wastemanager. Migration instructions are available.",
+        "de": "Erste Veröffentlichung als iobroker.wastemanager. Eine Migrationsanleitung ist verfügbar.",
+        "ru": "Первый выпуск под именем iobroker.wastemanager. Доступна инструкция по переходу.",
+        "pt": "Primeira versão como iobroker.wastemanager. Estão disponíveis instruções de migração.",
+        "nl": "Eerste versie als iobroker.wastemanager. Er zijn migratie-instructies beschikbaar.",
+        "fr": "Première version sous le nom iobroker.wastemanager. Des instructions de migration sont disponibles.",
+        "it": "Prima versione come iobroker.wastemanager. Sono disponibili le istruzioni per la migrazione.",
+        "es": "Primera versión como iobroker.wastemanager. Hay instrucciones de migración disponibles.",
+        "pl": "Pierwsze wydanie jako iobroker.wastemanager. Dostępna jest instrukcja migracji.",
+        "uk": "Перший випуск під назвою iobroker.wastemanager. Доступна інструкція з переходу.",
+        "zh-cn": "首次以 iobroker.wastemanager 名称发布。现已提供迁移说明。"
+      },
       "0.21.7": {
         "en": "Fixed Developer Portal metadata checks and automated npm releases.",
         "de": "Metadaten für das Developer Portal korrigiert und npm-Veröffentlichung automatisiert.",

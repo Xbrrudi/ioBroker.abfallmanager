@@ -43,8 +43,7 @@ jobs:
           os: ${{ matrix.os }}
 
   verify-release:
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [check-and-lint, adapter-tests]
+    needs: check-and-lint
     runs-on: ubuntu-latest
     timeout-minutes: 20
     outputs:
@@ -61,7 +60,7 @@ jobs:
         run: node .github/scripts/release-package.cjs version
       - name: Install build dependencies
         run: |
-          npm install --global npm@11
+          npm install --global npm@11.19.1
           npm ci
           npm ci --prefix src-admin
           npm ci --prefix src-widgets-jsvite
@@ -77,7 +76,10 @@ jobs:
           mkdir -p "$RUNNER_TEMP/verified-release"
           npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/verified-release"
           unpacked="$(mktemp -d)"
-          tar -xzf "$RUNNER_TEMP/verified-release/iobroker.wastemanager-${GITHUB_REF_NAME#v}.tgz" -C "$unpacked"
+          version="$(node -p 'require("./package.json").version')"
+          archive="$RUNNER_TEMP/verified-release/iobroker.wastemanager-$version.tgz"
+          sha256sum "$archive"
+          tar -xzf "$archive" -C "$unpacked"
           export NODE_PATH="$GITHUB_WORKSPACE/node_modules"
           cd "$unpacked/package"
           npm run check
@@ -120,6 +122,7 @@ jobs:
         with:
           artifact-ids: ${{ needs.verify-release.outputs.artifact-id }}
           path: ${{ runner.temp }}/verified-release
+          merge-multiple: true
       - name: Check npm for the verified release
         id: registry
         run: node .github/scripts/release-package.cjs lookup
@@ -127,6 +130,7 @@ jobs:
         if: steps.registry.outputs.published == 'false'
         with:
           node-version: '24.x'
+          install-command: npm install --global npm@11.19.1 && npm ci
           build: true
           build-command: bash .github/scripts/restore-release.sh
           github-token: ${{ github.token }}

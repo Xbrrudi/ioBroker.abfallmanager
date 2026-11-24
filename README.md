@@ -68,14 +68,14 @@ The GitHub Actions test workflow validates the package and tests installation, s
 
 ## Releases
 
-See [the manual rename and publication procedure](RENAME-RELEASE.md). Version 0.21.7 is unchanged in this PR; a version increase and release require separate approval. The retired `release.yml` must be disabled in GitHub Actions. Future releases use `test-and-release.yml`.
+See [the first publication and migration procedure](RENAME-RELEASE.md) for version 0.21.8. The retired `release.yml` must remain disabled in GitHub Actions. Releases use `test-and-release.yml`.
 
 
 The tag-triggered release workflow checks version metadata, tests, builds, schemas and package contents before publishing the verified archive through npm Trusted Publishing and attaching it to the GitHub release. For a partial workflow failure, use **Re-run failed jobs** to reuse the verified archive from that run. If the npm version already exists, the workflow checks its integrity against the archive.
 
 ## Changelog
 
-### Unreleased
+### 0.21.8
 
 - Rename the adapter, package, Admin and VIS-2 registration to `wastemanager` (English: Waste Manager; German: Abfallmanager), without changing functionality or widget layout.
 - Document migration with retained calendars, manual entries, settings and a rollback path; keep the old package available.
