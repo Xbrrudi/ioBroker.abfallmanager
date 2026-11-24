@@ -172,7 +172,7 @@ var require_ics_blocks = __commonJS({
         const metadata = String(original).replace(/\r\n?/g, "\n").replace(/BEGIN:VEVENT\n[\s\S]*?END:VEVENT\n?/g, "");
         return metadata.replace("END:VCALENDAR", b.join("\n") + "\nEND:VCALENDAR");
       }
-      return "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//ioBroker//Abfallmanager//DE\n" + b.join("\n") + "\nEND:VCALENDAR";
+      return "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//ioBroker//Waste Manager//DE\n" + b.join("\n") + "\nEND:VCALENDAR";
     }
     module.exports = { blocks, wrap };
   }

@@ -1,0 +1,161 @@
+name: Test and Release
+
+on:
+  push:
+    branches: [main]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-**'
+  pull_request: {}
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check-and-lint:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: ioBroker/testing-action-check@v2
+        with:
+          node-version: '24.x'
+          type-checking: true
+
+  adapter-tests:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    needs: check-and-lint
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['22.x', '24.x', '26.x']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - uses: ioBroker/testing-action-adapter@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          os: ${{ matrix.os }}
+
+  verify-release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [check-and-lint, adapter-tests]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      artifact-id: ${{ steps.archive.outputs.artifact-id }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          package-manager-cache: false
+      - name: Verify version metadata
+        run: node .github/scripts/release-package.cjs version
+      - name: Install build dependencies
+        run: |
+          npm install --global npm@11
+          npm ci
+          npm ci --prefix src-admin
+          npm ci --prefix src-widgets-jsvite
+      - name: Run unit tests and build release assets
+        run: |
+          npm test
+          npm run build:admin
+          npm run build:widgets
+          npm run check
+          npm run preflight:widgets
+      - name: Pack and verify release
+        run: |
+          mkdir -p "$RUNNER_TEMP/verified-release"
+          npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP/verified-release"
+          unpacked="$(mktemp -d)"
+          tar -xzf "$RUNNER_TEMP/verified-release/iobroker.wastemanager-${GITHUB_REF_NAME#v}.tgz" -C "$unpacked"
+          export NODE_PATH="$GITHUB_WORKSPACE/node_modules"
+          cd "$unpacked/package"
+          npm run check
+          npm run preflight:widgets
+      - uses: actions/upload-artifact@v6
+        id: archive
+        with:
+          name: verified-release-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/verified-release/*.tgz
+          if-no-files-found: error
+
+  deploy:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: [check-and-lint, adapter-tests, verify-release]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: write
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Require the legacy release workflow to be disabled
+        run: |
+          state="$(gh api "repos/$GH_REPO/actions/workflows/release.yml" --jq .state)"
+          if [[ "$state" != disabled_manually ]]; then
+            echo "::error::Disable release.yml in GitHub Actions before using this publisher."
+            exit 1
+          fi
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24.x'
+          package-manager-cache: false
+      - uses: actions/download-artifact@v7
+        with:
+          artifact-ids: ${{ needs.verify-release.outputs.artifact-id }}
+          path: ${{ runner.temp }}/verified-release
+      - name: Check npm for the verified release
+        id: registry
+        run: node .github/scripts/release-package.cjs lookup
+      - uses: ioBroker/testing-action-deploy@v1
+        if: steps.registry.outputs.published == 'false'
+        with:
+          node-version: '24.x'
+          build: true
+          build-command: bash .github/scripts/restore-release.sh
+          github-token: ${{ github.token }}
+        env:
+          NPM_CONFIG_IGNORE_SCRIPTS: 'true'
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
+          NPM_CONFIG_ACCESS: public
+      - name: Verify the published archive
+        run: node .github/scripts/release-package.cjs confirm
+      - name: Attach the verified TGZ to the GitHub release
+        run: |
+          tarball="iobroker.wastemanager-${GITHUB_REF_NAME#v}.tgz"
+          archive="$RUNNER_TEMP/verified-release/$tarball"
+          release_args=()
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            release_args+=(--prerelease)
+          fi
+          if ! gh release view "$GITHUB_REF_NAME" > /dev/null; then
+            gh release create "$GITHUB_REF_NAME" "$archive" --verify-tag --generate-notes "${release_args[@]}"
+          else
+            assets="$(gh release view "$GITHUB_REF_NAME" --json assets --jq '.assets[].name')"
+            if grep -Fxq "$tarball" <<< "$assets"; then
+              downloaded="$(mktemp -d)"
+              gh release download "$GITHUB_REF_NAME" --pattern "$tarball" --dir "$downloaded"
+              cmp "$archive" "$downloaded/$tarball"
+            else
+              gh release upload "$GITHUB_REF_NAME" "$archive"
+            fi
+            if [[ "$(gh release view "$GITHUB_REF_NAME" --json isDraft --jq .isDraft)" == true ]]; then
+              gh release edit "$GITHUB_REF_NAME" --draft=false
+            fi
+          fi

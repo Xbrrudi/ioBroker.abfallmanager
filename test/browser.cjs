@@ -6,12 +6,12 @@ const runtime=process.env.IOBROKER_TEST_ROOT||path.resolve(__dirname,'../../runt
 const logger={info:()=>{},debug:()=>{},silly:()=>{},warn:console.log,error:console.error};
 (async()=>{
  let db;await new Promise(resolve=>db=new Client({connection:conf.objects,logger,connected:resolve}));
- const read=()=>db.getObjectAsync('system.adapter.abfallmanager.0');
+ const read=()=>db.getObjectAsync('system.adapter.wastemanager.0');
  const b=await chromium.launch({headless:true});const page=await b.newPage({viewport:{width:1440,height:1000}});const problems=[];page.on('pageerror',e=>problems.push(e.message));page.on('console',m=>{if(['error','warning'].includes(m.type()))problems.push(m.type()+': '+m.text());});
  const checks=[];const ok=msg=>{checks.push(msg);console.log('OK',msg);};
  try{
  let obj=await read();obj.native={...obj.native,icsText:'',manualEntries:[],autoCleanup:true,retentionDays:7,daysBefore:6,preservedSetting:'update-test'};await db.setObjectAsync(obj._id,obj);
- await page.goto('http://127.0.0.1:18081/#tab-instances/config/system.adapter.abfallmanager.0');await page.waitForTimeout(1200);
+ await page.goto('http://127.0.0.1:18081/#tab-instances/config/system.adapter.wastemanager.0');await page.waitForTimeout(1200);
  if(await page.getByRole('button',{name:'Ok',exact:true}).count()){await page.getByLabel('Diese Tipps beim Start nicht mehr anzeigen').check();await page.getByRole('button',{name:'Ok',exact:true}).click();}
  await page.getByRole('heading',{name:'ICS-Datei direkt importieren'}).waitFor();assert.equal(page.frames().length,1);ok('Native GUI API 2 lädt im Admin 8.3.5 ohne iframe');
  const input=page.getByLabel('ICS-Datei',{exact:true});const fixture=path.join(__dirname,'fixtures/grevesmuehlen.ics');const conflict=path.join(__dirname,'fixtures/grevesmuehlen-konflikte.ics');

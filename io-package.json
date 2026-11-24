@@ -1,6 +1,6 @@
 {
   "common": {
-    "name": "abfallmanager",
+    "name": "wastemanager",
     "version": "0.21.7",
     "titleLang": {
       "de": "Abfallmanager",
@@ -42,8 +42,8 @@
     "adminUI": {
       "config": "json"
     },
-    "icon": "abfallmanager.svg",
-    "extIcon": "https://raw.githubusercontent.com/Xbrrudi/ioBroker.abfallmanager/main/admin/abfallmanager.svg",
+    "icon": "wastemanager.svg",
+    "extIcon": "https://raw.githubusercontent.com/Xbrrudi/ioBroker.wastemanager/main/admin/wastemanager.svg",
     "readme": "",
     "tier": 3,
     "supportCustoms": false,
@@ -58,10 +58,10 @@
       }
     ],
     "visWidgets": {
-      "vis2AbfallmanagerWidgets": {
-        "name": "vis2AbfallmanagerWidgets",
+      "vis2WastemanagerWidgets": {
+        "name": "vis2WastemanagerWidgets",
         "i18n": "component",
-        "url": "abfallmanager/customWidgets.js",
+        "url": "wastemanager/customWidgets.js",
         "bundlerType": "module",
         "components": [
           "WasteBinWidget"

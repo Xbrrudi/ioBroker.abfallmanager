@@ -1,48 +1,56 @@
-# ioBroker Abfallmanager
+# ioBroker Waste Manager
 
-Native Konfiguration für ioBroker Admin 8 (GUI API 2). Das Installationspaket enthält die fertig gebauten React-Komponenten und deren Module-Federation-Manifest. Auf dem ioBroker-System ist kein Frontend-Build erforderlich.
+[Deutsch](README.de.md)
 
-**Wichtige Grenze:** Der nachgewiesene Prozent-Rahmensprung liegt in der VIS-2-Containerumrechnung. Das Adapterpaket repariert die SVG-Darstellung, Größe und Anker sowie neue Prozent-Defaults. Für betroffene VIS-2-Seiten ist zusätzlich die separat mitgelieferte VIS-2-Korrektur erforderlich; das TGZ verändert den fremden VIS-Adapter nicht automatisch. Siehe TESTBERICHT.md und compat/README.md.
+Waste Manager processes local waste collection calendars. It combines iCalendar (ICS) files with manual entries and publishes collection dates and display states in ioBroker. It requires no vendor-specific hardware.
 
-## Voraussetzungen und Installation
+## Requirements and installation
 
-Getestet mit Admin 8.3.5, js-controller 7.2.5 und Node.js 22.23.5. Admin 8.3.5 setzt mindestens Node.js 22.19.0 voraus.
+The adapter requires Node.js 22.19.0 or later, js-controller 7.0.0 or later, and Admin 8.0.0 or later. The optional widget requires VIS 2. The package includes the built Admin components and their Module Federation manifest.
 
-Das Paket über die ioBroker-Installation aus einer lokalen Datei installieren, beispielsweise im ioBroker-Verzeichnis:
+Once the adapter is listed in ioBroker Latest, select the Latest (beta) repository in Admin, refresh the adapter list and add a **Waste Manager** instance. With Latest selected, the ioBroker CLI can also add the instance:
 
-```
-npm install /pfad/iobroker.abfallmanager-0.21.7.tgz --omit=dev
-iobroker upload abfallmanager
-iobroker add abfallmanager
+```sh
+iobroker add wastemanager
 ```
 
-Bei vorhandener Instanz den letzten Befehl auslassen und die Instanz neu starten. Die bestehende Instanzkonfiguration bleibt erhalten. Bei einem Update werden keine Standardtermine importiert.
+**The renamed package is not published yet.** These installation commands apply after publication and Latest admission. The existing [iobroker.abfallmanager 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) remains available. Switching to the new name requires a new instance and explicit migration; follow [MIGRATION.md](MIGRATION.md) to retain dates, settings and VIS-2 projects. Do not remove the old instance.
 
-## Bedienung
+## Configure waste types and collection dates
 
-Im Reiter „Allgemein / ICS“ eine ICS-Datei wählen. Die Vorschau zeigt neue Termine, Duplikate und Konflikte. Konflikte entstehen bei gleicher Tonne am gleichen Tag oder bei geänderter Abholung mit gleicher UID. Bei Konflikten Überschreiben, Überspringen oder Ergänzen wählen. Die nächste Entscheidung kann auf alle Konflikte angewendet werden. Exakte Duplikate werden übersprungen. Import bestätigen übernimmt Termine in den Admin-Entwurf. Weitere Dateien können anschließend ergänzt werden. Erst „Speichern“ bzw. „Speichern und schließen“ im Admin schreibt dauerhaft in die Instanzkonfiguration.
+1. Under **Waste types** (*Tonnenarten*), configure each type's ID, name, comma-separated matching keywords, color and enabled status. The built-in types are residual waste, recyclables, organic waste and paper. Residual waste and recyclables are enabled by default.
+2. Under **General / ICS** (*Allgemein / ICS*), choose an ICS file and review the preview. Exact duplicates are skipped. Collections for the same bin on the same day or changed collections with the same UID can require a decision. Replace, skip or add the incoming entry, and optionally apply the same decision to the remaining conflicts. Confirm the import to add the entries to the draft. You can then import more files.
+3. Under **Dates / Corrections** (*Termine / Korrekturen*), review imported and manual entries in one chronological list with 25 entries per page. Add, edit, move or delete individual collections. Existing manual cancellations and rescheduling entries remain visible and take effect when the calendar is calculated.
+4. Select **Save** or **Save and close** in Admin to persist the draft.
 
-„Termine / Korrekturen“ zeigt importierte und manuelle Termine gemeinsam, chronologisch sortiert. Hinzufügen, Bearbeiten/Verschieben und bestätigtes Löschen ändern ebenfalls zunächst nur den Entwurf. Nach 25 Zeilen kann zur nächsten Seite gewechselt werden; die Komponente erzeugt keinen eigenen Scrollbereich. Frühere manuelle Streichungen und Verschiebungen bleiben sichtbar und wirksam.
+The ICS importer accepts individual `VEVENT` entries, all-day and timed `DTSTART` values, folded lines and escaped text. The date portion of `DTSTART` determines the pickup day. Export recurring events as individual occurrences before importing, since the importer rejects `RRULE`. The per-file limit is 5 MB.
 
-Die automatische Bereinigung läuft beim Start und am ersten Minuten-Takt nach dem lokalen Kalenderwechsel. Standardwert 1 entfernt eine Abholung am Folgetag. 0 entfernt sie bereits am Abholtag, 7 nach sieben Kalendertagen. `autoCleanup=false` deaktiviert die Automatik. Der Datenpunkt `cleanup.trigger` ermöglicht eine ausdrücklich angeforderte sofortige Bereinigung. Die Bereinigung schreibt dauerhaft und erhält andere Einstellungen.
+## Remove expired collections
 
-ICS unterstützt einzelne VEVENT-Termine mit Datum oder Datum/Uhrzeit, gefaltete Zeilen und maskierte Texte. Die Abholung gehört immer zum in DTSTART angegebenen Kalendertag. Wiederholungsregeln (RRULE) werden mit einer verständlichen Importfehlermeldung abgewiesen; sie müssen als Einzeltermine exportiert werden. Maximal 5 MB je Datei.
+Automatic cleanup runs on startup and on the first minute tick after the local date changes. It permanently removes expired ICS and manual entries while preserving other settings. The default retention is one day, so a collection is removed the following day. A value of 0 removes it on the collection day, and 7 removes it seven calendar days later. Set a retention period from 0 to 365 days or disable automatic cleanup. Set `cleanup.trigger` to `true` to run cleanup immediately, including when automatic cleanup is disabled.
 
-## VIS 2
+## States and VIS 2
 
-Das native Widget erscheint automatisch unter „Abfallmanager“. Es verwendet Module Federation mit einem ES-Modul-Einstieg und die bestehende VIS-Verbindung. Es liest weiterhin den Datenpunkt `abfallmanager.N.display.json`; die unveränderte Adapterlogik bestimmt das Zeitfenster und die Ausblendung ab 18 Uhr.
+The adapter exposes these states under `wastemanager.N`, where `N` is the instance number.
 
-Die vier vorhandenen transparenten Fotografie-PNGs werden in einem SVG ausgegeben. SVG-Viewport und ViewBox besitzen dieselben Pixelabmessungen. Tonnenbreite 120 und Tonnenhöhe 185 ergeben daher eine Bildfläche von 120 × 185 CSS-Pixeln. Die äußere Rahmengröße vergrößert diese Bildfläche nicht. Ein zu kleiner Rahmen begrenzt den Inhalt; er lässt sich im normalen VIS-Editor vergrößern.
+| States | Contents |
+| --- | --- |
+| `schedule.json` | Resolved schedule from imported and manual entries |
+| `next.date`, `next.daysLeft`, `next.types` | Next collection date, days until collection and waste types due |
+| `display.visible`, `display.types`, `display.json`, `display.count` | Visibility, waste types, widget data and the number of bins displayed |
+| `bins.<id>.visible`, `bins.<id>.date`, `bins.<id>.image` | Visibility, next date and image path for each configured bin |
+| `status.imported`, `status.manual`, `status.warnings`, `status.error` | Import and manual-entry counts, parser warnings and startup configuration errors |
+| `cleanup.trigger`, `cleanup.lastRun`, `cleanup.lastRemoved` | Manual cleanup control, last run and number of entries removed |
 
-Die erste sichtbare Tonne beginnt links bei x=0, alle stehen auf derselben Grundlinie. Weitere sichtbare Tonnen folgen rechts mit dem eingestellten Abstand. Reihenfolge: Restabfall, Wertstoff, Bio, Papier. Ausgeblendete Tonnen belegen keinen Platz.
+The visibility window applies to the next pickup date. In **Display in VIS 2** (*Anzeige in VIS 2*), set how many days in advance to display bins (0–30, default 2) and the local hour to hide them on pickup day (0–24, default 18).
 
-Neue Widgets erhalten über `visDefaultStyle` die Werte left/top 0 %, width 60 % und height 35 %. Bestehende Styles werden nicht migriert oder überschrieben. Auch vorhandene Pixelwerte bleiben erhalten. Die innere SVG-Darstellung verändert weder den äußeren Rahmen noch dessen Drag-/Resize-Verhalten.
+Add the native **Waste Manager** widget in the VIS 2 editor. It reads `display.json` through the existing VIS connection. Choose the instance, bin width and height, spacing, shadow, labels, font size and color, and what to show when no bin is due. The four transparent bin images appear from left to right in this order: residual waste, recyclables, organic waste and paper. Visible bins share a baseline and hidden bins take up no space.
 
-Schatten, Beschriftung, Schriftgröße/-farbe, Abstand, Tonnenmaße, Instanz und Leerdarstellung bleiben konfigurierbar. Bestehende VIS-Datenpunkte und Assets bleiben verfügbar.
+The widget draws the images in an SVG at their configured CSS pixel dimensions. A larger VIS frame provides more room, while a smaller frame can clip the content. Resize the frame in the editor as needed. New widgets start at left/top 0%, width 60% and height 35%. Existing widgets retain their styles, including pixel-based positions and dimensions. For affected projects with a frame that jumps when using percentage dimensions, see the separate [VIS 2 compatibility notes](compat/README.md) and [test report](TESTBERICHT.md).
 
-## Entwicklung und Tests
+## Development and tests
 
-```
+```sh
 npm ci
 npm ci --prefix src-admin
 npm run build:admin
@@ -50,24 +58,36 @@ npm ci --prefix src-widgets-jsvite
 npm run build:widgets
 npm test
 npm run check
+npm run test:package
+npm run test:integration
 npm run preflight:widgets
 npm pack
 ```
 
-Browser- und Controller-Integrationstests verwenden ausschließlich eine separate Testinstallation. Dazu `IOBROKER_TEST_ROOT` auf deren Verzeichnis setzen; dort müssen Admin 8.3.5 auf 127.0.0.1:18081, js-controller 7.2.5 und die Abfallmanager-Testinstanz eingerichtet sein. Diese Tests verändern deren Konfiguration. `npm run test:browser` und `npm run test:controller` ausführen. Testergebnisse landen in `TEST_OUTPUT_DIR` oder `test-results/`.
+The GitHub Actions test workflow validates the package and tests installation, startup and shutdown with js-controller 7.2.5 on Node.js 22, 24 and 26 across Ubuntu, Windows and macOS. The additional `npm run test:browser` and `npm run test:controller` checks use a separate installation pointed to by `IOBROKER_TEST_ROOT`, with Admin 8.3.5 on `127.0.0.1:18081`, js-controller 7.2.5 and a Waste Manager test instance. These checks modify the test instance configuration. Reports go to `TEST_OUTPUT_DIR` or `test-results/`. See the [test report](TESTBERICHT.md) for previous results.
 
-Siehe TESTBERICHT.md für ausgeführte Prüfungen und Einschränkungen.
+## Releases
 
-## Veröffentlichung
+See [the manual rename and publication procedure](RENAME-RELEASE.md). Version 0.21.7 is unchanged in this PR; a version increase and release require separate approval. The retired `release.yml` must be disabled in GitHub Actions. Future releases use `test-and-release.yml`.
 
-Nach Freigabe und Merge den passenden Versions-Tag auf den Release-Commit in `main` setzen und zu GitHub übertragen. Der Workflow `release.yml` prüft Versionen, Tests, Builds, Schema und Paketinhalt. GitHub Actions veröffentlicht das geprüfte Tarball per npm Trusted Publishing und hängt es danach an das GitHub-Release an.
 
-Bei einem Teilfehler in GitHub Actions **Re-run failed jobs** verwenden, damit die erfolgreichen Jobs und das bereits geprüfte Tarball desselben Laufs wiederverwendet werden. Ist die Version bereits auf npm vorhanden, wird die Integrität mit dem geprüften Tarball verglichen.
+The tag-triggered release workflow checks version metadata, tests, builds, schemas and package contents before publishing the verified archive through npm Trusted Publishing and attaching it to the GitHub release. For a partial workflow failure, use **Re-run failed jobs** to reuse the verified archive from that run. If the npm version already exists, the workflow checks its integrity against the archive.
 
 ## Changelog
 
+### Unreleased
+
+- Rename the adapter, package, Admin and VIS-2 registration to `wastemanager` (English: Waste Manager; German: Abfallmanager), without changing functionality or widget layout.
+- Document migration with retained calendars, manual entries, settings and a rollback path; keep the old package available.
+
 ### 0.21.7
 
-- `@iobroker/testing` auf `^6.3.0` aktualisiert (E0036).
-- Unzulässiges Versionsfeld auf oberster Ebene der `io-package.json` entfernt (E1105).
-- Veröffentlichung auf npm und GitHub per getaggtem GitHub-Actions-Workflow eingerichtet.
+- Updated `@iobroker/testing` to `^6.3.0` (E0036).
+- Removed the top-level version property from `io-package.json` (E1105).
+- Automated npm and GitHub releases with a tag-triggered GitHub Actions workflow.
+
+## License
+
+Copyright (c) 2026 Andre Rudat and Abfallmanager contributors
+
+[MIT](LICENSE)

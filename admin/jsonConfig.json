@@ -28,7 +28,7 @@
         },
         "importPanel": {
           "type": "custom",
-          "name": "AbfallmanagerSet/Components/ImportPanel",
+          "name": "WastemanagerSet/Components/ImportPanel",
           "url": "custom/customComponents.js",
           "guiApi": 2,
           "newLine": true,
@@ -83,7 +83,7 @@
         },
         "calendar": {
           "type": "custom",
-          "name": "AbfallmanagerSet/Components/CalendarPanel",
+          "name": "WastemanagerSet/Components/CalendarPanel",
           "url": "custom/customComponents.js",
           "guiApi": 2,
           "newLine": true,

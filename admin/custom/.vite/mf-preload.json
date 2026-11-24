@@ -1,0 +1,13 @@
+{
+  "hostInit": [
+    "assets/Components-CG2jBn4z.js",
+    "assets/hostInit-r0j0w0-W.js",
+    "customComponents.js",
+    "assets/_virtual_mf-localSharedImportMap___mfe_internal__WastemanagerSet__mf_owner__1-BypMqFkU.js",
+    "assets/helpers-DyfPaPWy.js",
+    "assets/vite-preload-helper-D97eqSzU.js",
+    "assets/dist-XMZvvHVn.js",
+    "assets/utils-CFiT7tVn.js"
+  ],
+  "remoteEntries": []
+}

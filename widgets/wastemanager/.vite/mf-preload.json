@@ -1,0 +1,14 @@
+{
+  "hostInit": [
+    "assets/WasteBinWidget-DcpIcCxh.js",
+    "assets/hostInit-P_8-qZyr.js",
+    "assets/translations-Beb5YBQ3.js",
+    "customWidgets.js",
+    "assets/_virtual_mf-localSharedImportMap___mfe_internal__vis2WastemanagerWidgets__mf_owner__1-gUEOWiDt.js",
+    "assets/helpers-DyfPaPWy.js",
+    "assets/vite-preload-helper-D97eqSzU.js",
+    "assets/dist-XMZvvHVn.js",
+    "assets/utils-CFiT7tVn.js"
+  ],
+  "remoteEntries": []
+}

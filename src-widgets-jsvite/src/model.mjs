@@ -1,6 +1,6 @@
 export const TYPES=['rest','gelb','bio','papier'];
 export const NAMES={rest:'Restabfall',gelb:'Wertstoff',bio:'Bio',papier:'Papier'};
-export function instanceId(value){const id=String(value||'abfallmanager.0').replace(/^system\.adapter\./,'');return /^abfallmanager\.\d+$/.test(id)?id:'abfallmanager.0';}
+export function instanceId(value){const id=String(value||'wastemanager.0').replace(/^system\.adapter\./,'');return /^wastemanager\.\d+$/.test(id)?id:'wastemanager.0';}
 export function readDisplay(value){
  if(value===null||value===undefined||value==='')return {entries:[],error:''};
  try{
