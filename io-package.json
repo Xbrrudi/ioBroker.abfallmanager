@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "abfallmanager",
-    "version": "0.21.6",
+    "version": "0.21.7",
     "titleLang": {
       "de": "Abfallmanager",
       "en": "Waste Manager",
@@ -81,6 +81,19 @@
       "calendar"
     ],
     "news": {
+      "0.21.7": {
+        "en": "Fixed Developer Portal metadata checks and automated npm releases.",
+        "de": "Metadaten für das Developer Portal korrigiert und npm-Veröffentlichung automatisiert.",
+        "ru": "Исправлены метаданные для Developer Portal и автоматизирована публикация в npm.",
+        "pt": "Corrigidos os metadados para o Developer Portal e automatizada a publicação no npm.",
+        "nl": "Metadata voor het Developer Portal gecorrigeerd en publicatie op npm geautomatiseerd.",
+        "fr": "Métadonnées corrigées pour le Developer Portal et publication sur npm automatisée.",
+        "it": "Corretti i metadati per il Developer Portal e automatizzata la pubblicazione su npm.",
+        "es": "Corregidos los metadatos para el Developer Portal y automatizada la publicación en npm.",
+        "pl": "Poprawiono metadane dla Developer Portal i zautomatyzowano publikację w npm.",
+        "uk": "Виправлено метадані для Developer Portal та автоматизовано публікацію в npm.",
+        "zh-cn": "修正了 Developer Portal 的元数据，并实现了 npm 自动发布。"
+      },
       "0.21.6": {
         "en": "Improved adapter metadata and publication checks",
         "de": "Adapter-Metadaten und Veröffentlichungsprüfungen verbessert",
@@ -153,6 +166,5 @@
     "importedEntries": []
   },
   "objects": [],
-  "instanceObjects": [],
-  "version": "0.21.6"
+  "instanceObjects": []
 }
