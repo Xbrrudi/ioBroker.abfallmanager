@@ -57,7 +57,7 @@ jobs:
           node-version: '24.x'
           package-manager-cache: false
       - name: Verify version metadata
-        run: node .github/scripts/release-package.cjs version
+        run: node scripts/release-package.cjs version
       - name: Install build dependencies
         run: |
           npm install --global npm@11.19.1
@@ -125,7 +125,7 @@ jobs:
           merge-multiple: true
       - name: Check npm for the verified release
         id: registry
-        run: node .github/scripts/release-package.cjs lookup
+        run: node scripts/release-package.cjs lookup
       - uses: ioBroker/testing-action-deploy@v1
         if: steps.registry.outputs.published == 'false'
         with:
@@ -138,8 +138,9 @@ jobs:
           NPM_CONFIG_IGNORE_SCRIPTS: 'true'
           NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
           NPM_CONFIG_ACCESS: public
+          NPM_CONFIG_PROVENANCE: 'true'
       - name: Verify the published archive
-        run: node .github/scripts/release-package.cjs confirm
+        run: node scripts/release-package.cjs confirm
       - name: Attach the verified TGZ to the GitHub release
         run: |
           tarball="iobroker.wastemanager-${GITHUB_REF_NAME#v}.tgz"

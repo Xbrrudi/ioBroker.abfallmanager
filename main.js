@@ -9,7 +9,13 @@ class Wastemanager extends utils.Adapter {
         this.on('ready', () => this.onReady());
         this.on('stateChange', (id, state) => this.onStateChange(id, state));
         this.on('message', obj => this.onMessage(obj));
-        this.on('unload', callback => { if (this.timer) clearInterval(this.timer); callback(); });
+        this.on('unload', callback => {
+            if (this.timer !== undefined) {
+                this.clearInterval(this.timer);
+                this.timer = undefined;
+            }
+            callback();
+        });
     }
     async onMessage(obj) {
         if (!obj || !obj.callback || !['previewImport','commitImport','listEntries','mutateEntry'].includes(obj.command)) return;
@@ -106,7 +112,7 @@ class Wastemanager extends utils.Adapter {
             await this.loadSchedule();
             await this.update();
             this.lastCleanupDay = new Date().toDateString();
-            this.timer = setInterval(async () => {
+            this.timer = this.setInterval(async () => {
                 try {
                     const today = new Date().toDateString();
                     if (today !== this.lastCleanupDay) {

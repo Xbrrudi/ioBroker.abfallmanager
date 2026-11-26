@@ -5,16 +5,16 @@ const { createHash } = require('node:crypto');
 const { appendFileSync, readFileSync } = require('node:fs');
 const path = require('node:path');
 const { setTimeout: wait } = require('node:timers/promises');
-const pkg = require('../../package.json');
-const lock = require('../../package-lock.json');
-const adapter = require('../../io-package.json');
+const pkg = require('../package.json');
+const lock = require('../package-lock.json');
+const adapter = require('../io-package.json');
 
 async function main() {
     const mode = process.argv[2];
     const version = pkg.version;
     const workspacePackages = ['src-admin', 'src-widgets-jsvite'].flatMap(directory => {
-        const manifest = require(`../../${directory}/package.json`);
-        const lockfile = require(`../../${directory}/package-lock.json`);
+        const manifest = require(`../${directory}/package.json`);
+        const lockfile = require(`../${directory}/package-lock.json`);
         return [manifest.version, lockfile.version, lockfile.packages[''].version];
     });
     for (const value of [lock.version, lock.packages[''].version, adapter.common.version, ...workspacePackages]) {
@@ -41,7 +41,12 @@ async function main() {
         if (response.ok) {
             const metadata = await response.json();
             assert.equal(metadata.dist?.integrity, integrity, 'npm contains a different archive for this version');
-            if (mode === 'lookup') appendFileSync(process.env.GITHUB_OUTPUT, 'published=true\n');
+            if (mode === 'lookup') {
+                appendFileSync(process.env.GITHUB_OUTPUT, 'published=true\n');
+            } else if (!metadata.dist?.attestations?.provenance) {
+                await wait(5000);
+                continue;
+            }
             return;
         }
         assert.equal(response.status, 404, 'Unexpected npm registry response');
@@ -51,7 +56,7 @@ async function main() {
         }
         await wait(5000);
     }
-    throw new Error('Published version did not appear in the npm registry');
+    throw new Error('Published version or its provenance did not appear in the npm registry');
 }
 
 main().catch(error => {

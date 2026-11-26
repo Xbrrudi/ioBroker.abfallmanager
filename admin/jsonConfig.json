@@ -8,23 +8,43 @@
       "items": {
         "importHelp": {
           "type": "staticText",
-          "text": "ICS-Datei auswählen, Import prüfen und Konflikte bestätigen. Weitere Dateien ergänzen die vorhandenen Termine."
+          "text": "ICS-Datei auswählen, Import prüfen und Konflikte bestätigen. Weitere Dateien ergänzen die vorhandenen Termine.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         },
         "cleanupInfo": {
           "type": "staticText",
-          "text": "Abgelaufene Termine werden aus dem gespeicherten ICS-Kalender und den manuellen Terminen entfernt. Standard: am Tag nach der Abholung. Manuelle Sofortbereinigung über den Datenpunkt cleanup.trigger."
+          "text": "Abgelaufene Termine werden aus dem gespeicherten ICS-Kalender und den manuellen Terminen entfernt. Standard: am Tag nach der Abholung. Manuelle Sofortbereinigung über den Datenpunkt cleanup.trigger.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         },
         "autoCleanup": {
           "type": "checkbox",
           "label": "Abgelaufene Termine automatisch löschen",
-          "newLine": true
+          "newLine": true,
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         },
         "retentionDays": {
           "type": "number",
           "label": "Tage nach Abholung aufbewahren (0 = am Abholtag, 1 = am Folgetag)",
           "min": 0,
           "max": 365,
-          "newLine": true
+          "newLine": true,
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         },
         "importPanel": {
           "type": "custom",
@@ -32,7 +52,11 @@
           "url": "custom/customComponents.js",
           "guiApi": 2,
           "newLine": true,
-          "xs": 12
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         }
       }
     },
@@ -69,7 +93,12 @@
               "type": "color",
               "title": "Farbe"
             }
-          ]
+          ],
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         }
       }
     },
@@ -79,7 +108,12 @@
       "items": {
         "datesInfo": {
           "type": "staticText",
-          "text": "Importierte und manuelle Termine gemeinsam bearbeiten. Änderungen werden erst mit Speichern übernommen."
+          "text": "Importierte und manuelle Termine gemeinsam bearbeiten. Änderungen werden erst mit Speichern übernommen.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         },
         "calendar": {
           "type": "custom",
@@ -87,7 +121,11 @@
           "url": "custom/customComponents.js",
           "guiApi": 2,
           "newLine": true,
-          "xs": 12
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         }
       }
     },
@@ -99,17 +137,32 @@
           "type": "number",
           "label": "Tage vor der Abholung anzeigen",
           "min": 0,
-          "max": 30
+          "max": 30,
+          "xs": 12,
+          "sm": 6,
+          "md": 6,
+          "lg": 6,
+          "xl": 6
         },
         "hideHour": {
           "type": "number",
           "label": "Am Abholtag ausblenden (Stunde 0–24)",
           "min": 0,
-          "max": 24
+          "max": 24,
+          "xs": 12,
+          "sm": 6,
+          "md": 6,
+          "lg": 6,
+          "xl": 6
         },
         "displayHint": {
           "type": "staticText",
-          "text": "Position, Größe und Schatten werden am VIS-2-Widget eingestellt. Das native Widget bleibt bis zum erfolgreichen Laufzeittest deaktiviert."
+          "text": "Position, Größe und Schatten werden am VIS-2-Widget eingestellt.",
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         }
       }
     }

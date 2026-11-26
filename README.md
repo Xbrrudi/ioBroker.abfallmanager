@@ -6,15 +6,15 @@ Waste Manager processes local waste collection calendars. It combines iCalendar 
 
 ## Requirements and installation
 
-The adapter requires Node.js 22.19.0 or later, js-controller 7.0.0 or later, and Admin 8.0.0 or later. The optional widget requires VIS 2. The package includes the built Admin components and their Module Federation manifest.
+The adapter requires Node.js 22.19.0 or later, js-controller 7.0.7 or later, and Admin 8.0.0 or later. The optional widget requires VIS 2. The package includes the built Admin components and their Module Federation manifest.
 
-Once the adapter is listed in ioBroker Latest, select the Latest (beta) repository in Admin, refresh the adapter list and add a **Waste Manager** instance. With Latest selected, the ioBroker CLI can also add the instance:
+Install the published package from npm. Admission to ioBroker Latest is pending.
 
 ```sh
-iobroker add wastemanager
+iobroker url iobroker.wastemanager
 ```
 
-**The renamed package is not published yet.** These installation commands apply after publication and Latest admission. The existing [iobroker.abfallmanager 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) remains available. Switching to the new name requires a new instance and explicit migration; follow [MIGRATION.md](MIGRATION.md) to retain dates, settings and VIS-2 projects. Do not remove the old instance.
+The existing [iobroker.abfallmanager 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) remains available. Switching to the new name requires a new instance and explicit migration; follow [MIGRATION.md](MIGRATION.md) to retain dates, settings and VIS-2 projects. Do not remove the old instance.
 
 ## Configure waste types and collection dates
 
@@ -64,16 +64,22 @@ npm run preflight:widgets
 npm pack
 ```
 
-The GitHub Actions test workflow validates the package and tests installation, startup and shutdown with js-controller 7.2.5 on Node.js 22, 24 and 26 across Ubuntu, Windows and macOS. The additional `npm run test:browser` and `npm run test:controller` checks use a separate installation pointed to by `IOBROKER_TEST_ROOT`, with Admin 8.3.5 on `127.0.0.1:18081`, js-controller 7.2.5 and a Waste Manager test instance. These checks modify the test instance configuration. Reports go to `TEST_OUTPUT_DIR` or `test-results/`. See the [test report](TESTBERICHT.md) for previous results.
+The GitHub Actions test workflow validates the package and tests installation, startup and shutdown with js-controller 7.2.5 on Node.js 22, 24 and 26 across Ubuntu, Windows and macOS. The additional `npm run test:browser` and `npm run test:controller` checks use a separate installation pointed to by `IOBROKER_TEST_ROOT`, with Admin 8.3.5 on `127.0.7.1:18081`, js-controller 7.2.5 and a Waste Manager test instance. These checks modify the test instance configuration. Reports go to `TEST_OUTPUT_DIR` or `test-results/`. See the [test report](TESTBERICHT.md) for previous results.
 
 ## Releases
 
-See [the first publication and migration procedure](RENAME-RELEASE.md) for version 0.21.8. The retired `release.yml` must remain disabled in GitHub Actions. Releases use `test-and-release.yml`.
+See the [release procedure](RENAME-RELEASE.md). Keep `release.yml` disabled in GitHub Actions. Releases use `test-and-release.yml`.
 
 
 The tag-triggered release workflow checks version metadata, tests, builds, schemas and package contents before publishing the verified archive through npm Trusted Publishing and attaching it to the GitHub release. For a partial workflow failure, use **Re-run failed jobs** to reuse the verified archive from that run. If the npm version already exists, the workflow checks its integrity against the archive.
 
 ## Changelog
+
+### 0.21.9
+
+- Require js-controller 7.0.7 or later.
+- Complete repository metadata and responsive Admin settings.
+- Use compact-mode timers and verify npm provenance in the release workflow.
 
 ### 0.21.8
 
@@ -88,6 +94,6 @@ The tag-triggered release workflow checks version metadata, tests, builds, schem
 
 ## License
 
-Copyright (c) 2026 Andre Rudat and Abfallmanager contributors
+Copyright (c) 2026 Andre Rudat <xbrrudi@gmx.de> and Abfallmanager contributors
 
 [MIT](LICENSE)
