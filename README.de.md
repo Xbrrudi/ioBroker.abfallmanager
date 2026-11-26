@@ -10,15 +10,15 @@ Native Konfiguration für ioBroker Admin 8 (GUI API 2). Das Installationspaket e
 
 ## Voraussetzungen und Installation
 
-Der Adapter setzt Node.js ab 22.19.0, js-controller ab 7.0.0 und Admin ab 8.0.0 voraus. Für das optionale Widget wird VIS 2 benötigt.
+Der Adapter setzt Node.js ab 22.19.0, js-controller ab 7.0.7 und Admin ab 8.0.0 voraus. Für das optionale Widget wird VIS 2 benötigt.
 
-Nach der Aufnahme in ioBroker Latest in Admin das Repository **Latest (Beta)** auswählen, die Adapterliste aktualisieren und eine Instanz von **Abfallmanager** hinzufügen. Bei ausgewähltem Latest-Repository geht das auch über die ioBroker-Kommandozeile:
+Das veröffentlichte Paket ist über npm installierbar. Die Aufnahme in ioBroker Latest steht noch aus.
 
 ```sh
-iobroker add wastemanager
+iobroker url iobroker.wastemanager
 ```
 
-**Das umbenannte Paket ist noch nicht veröffentlicht.** Die Installationsbefehle gelten nach Veröffentlichung und Aufnahme in Latest. Das bisherige [iobroker.abfallmanager 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) bleibt verfügbar. Der Namenswechsel benötigt eine neue Instanz und eine gezielte Migration. [MIGRATION.md](MIGRATION.md) beschreibt die Übernahme von Terminen, Einstellungen und VIS-2-Projekten. Die alte Instanz nicht löschen.
+Das bisherige [iobroker.abfallmanager 0.21.7](https://www.npmjs.com/package/iobroker.abfallmanager/v/0.21.7) bleibt verfügbar. Der Namenswechsel benötigt eine neue Instanz und eine gezielte Migration. [MIGRATION.md](MIGRATION.md) beschreibt die Übernahme von Terminen, Einstellungen und VIS-2-Projekten. Die alte Instanz nicht löschen.
 
 ## Bedienung
 
@@ -58,17 +58,23 @@ npm run preflight:widgets
 npm pack
 ```
 
-Browser- und Controller-Integrationstests verwenden ausschließlich eine separate Testinstallation. Dazu `IOBROKER_TEST_ROOT` auf deren Verzeichnis setzen; dort müssen Admin 8.3.5 auf 127.0.0.1:18081, js-controller 7.2.5 und die Abfallmanager-Testinstanz eingerichtet sein. Diese Tests verändern deren Konfiguration. `npm run test:browser` und `npm run test:controller` ausführen. Testergebnisse landen in `TEST_OUTPUT_DIR` oder `test-results/`.
+Browser- und Controller-Integrationstests verwenden ausschließlich eine separate Testinstallation. Dazu `IOBROKER_TEST_ROOT` auf deren Verzeichnis setzen; dort müssen Admin 8.3.5 auf 127.0.7.1:18081, js-controller 7.2.5 und die Abfallmanager-Testinstanz eingerichtet sein. Diese Tests verändern deren Konfiguration. `npm run test:browser` und `npm run test:controller` ausführen. Testergebnisse landen in `TEST_OUTPUT_DIR` oder `test-results/`.
 
 Siehe TESTBERICHT.md für ausgeführte Prüfungen und Einschränkungen.
 
 ## Veröffentlichung
 
-Die [Anleitung zur Erstveröffentlichung und Migration](RENAME-RELEASE.md) beschreibt den Ablauf für Version 0.21.8. Der bisherige Workflow `release.yml` bleibt in GitHub Actions deaktiviert. Releases verwenden `test-and-release.yml`.
+Siehe [Release-Anleitung](RENAME-RELEASE.md). Der Workflow `release.yml` bleibt deaktiviert. `test-and-release.yml` veröffentlicht über npm Trusted Publishing.
 
 Bei einem Teilfehler in GitHub Actions **Re-run failed jobs** verwenden, damit die erfolgreichen Jobs und das bereits geprüfte Tarball desselben Laufs wiederverwendet werden. Ist die Version bereits auf npm vorhanden, wird die Integrität mit dem geprüften Tarball verglichen.
 
 ## Changelog
+
+### 0.21.9
+
+- js-controller 7.0.7 oder neuer voraussetzen.
+- Repository-Metadaten und responsives Admin-Layout vervollständigen.
+- Compact-Mode-Timer verwenden und npm-Provenance im Release-Workflow prüfen.
 
 ### 0.21.8
 
@@ -80,3 +86,9 @@ Bei einem Teilfehler in GitHub Actions **Re-run failed jobs** verwenden, damit d
 - `@iobroker/testing` auf `^6.3.0` aktualisiert (E0036).
 - Unzulässiges Versionsfeld auf oberster Ebene der `io-package.json` entfernt (E1105).
 - Veröffentlichung auf npm und GitHub per getaggtem GitHub-Actions-Workflow eingerichtet.
+
+## Lizenz
+
+Copyright (c) 2026 Andre Rudat <xbrrudi@gmx.de> and Abfallmanager contributors
+
+[MIT](LICENSE)

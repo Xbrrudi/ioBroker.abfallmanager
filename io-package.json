@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "wastemanager",
-    "version": "0.21.8",
+    "version": "0.21.9",
     "titleLang": {
       "de": "Abfallmanager",
       "en": "Waste Manager",
@@ -29,7 +29,7 @@
       "zh-cn": "通过 ICS 和手动录入管理本地垃圾收集日程"
     },
     "authors": [
-      "Andre Rudat"
+      "Andre Rudat <xbrrudi@gmx.de>"
     ],
     "platform": "Javascript/Node.js",
     "mode": "daemon",
@@ -49,7 +49,7 @@
     "supportCustoms": false,
     "dependencies": [
       {
-        "js-controller": ">=7.0.0"
+        "js-controller": ">=7.0.7"
       }
     ],
     "globalDependencies": [
@@ -81,6 +81,19 @@
       "calendar"
     ],
     "news": {
+      "0.21.9": {
+        "en": "Updated repository metadata, responsive Admin settings and release verification.",
+        "de": "Repository-Metadaten, responsives Admin-Layout und Release-Prüfung aktualisiert.",
+        "ru": "Обновлены метаданные репозитория, адаптивные настройки Admin и проверка выпуска.",
+        "pt": "Atualizados os metadados do repositório, as definições responsivas do Admin e a verificação da versão.",
+        "nl": "Repositorymetadata, responsieve Admin-instellingen en releasecontrole bijgewerkt.",
+        "fr": "Mise à jour des métadonnées, des réglages adaptatifs d’Admin et de la vérification de la publication.",
+        "it": "Aggiornati i metadati, le impostazioni adattive di Admin e la verifica della pubblicazione.",
+        "es": "Actualizados los metadatos, los ajustes adaptativos de Admin y la verificación de la publicación.",
+        "pl": "Zaktualizowano metadane, responsywne ustawienia Admin i weryfikację wydania.",
+        "uk": "Оновлено метадані, адаптивні налаштування Admin та перевірку випуску.",
+        "zh-cn": "更新了仓库元数据、管理界面的响应式设置和发布验证。"
+      },
       "0.21.8": {
         "en": "First release as iobroker.wastemanager. Migration instructions are available.",
         "de": "Erste Veröffentlichung als iobroker.wastemanager. Eine Migrationsanleitung ist verfügbar.",
